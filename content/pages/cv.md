@@ -125,7 +125,7 @@ Authors: Matteo Gätzner
 
 ### Rust Library: **mini-mcmc**
 
-Open Source Project (Zürich, Switzerland) 01/2024 – Present
+Open Source Project (Zürich, Switzerland) 03/2025 – Present
 
 - Author and main contributor of **mini-mcmc**, an open-source Rust library implementing Markov Chain Monte Carlo (MCMC) algorithms, including:
     - Hamiltonian Monte Carlo (HMC),
