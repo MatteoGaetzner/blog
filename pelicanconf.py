@@ -15,14 +15,6 @@ PAGE_PATHS = ["pages"]
 PAGE_URL = "{slug}/"
 PAGE_SAVE_AS = "{slug}/index.html"
 
-# Optional: if your theme uses MENUITEMS instead of LINKS, you could list it here.
-# But since you already use `LINKS`, you can keep that.
-# LINKS = [
-#     ("About", "/pages/about.html"),
-#     ("Projects", "/categories.html"),
-# ("CV", "/cv/"),  # ← changed from "/pages/cv.html" to "/cv/"
-# ]
-
 # …the rest of your pelicanconf.py as-is…
 DEFAULT_PAGINATION = 10
 THEME = "themes/pelican-alchemy/alchemy"
@@ -41,3 +33,8 @@ BOOTSTRAP_CSS = (
 )
 PYGMENTS_STYLE = "monokai"
 HIDE_AUTHORS = True
+
+PLUGIN_PATHS = ["pelican-plugins"]
+PLUGINS = ["render_math"]
+
+RENDER_MATH = True

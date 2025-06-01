@@ -1,6 +1,6 @@
 Title: Resume
 Date: 2025-06-01 12:00
-Slug: cv
+Slug: resume
 Category: About
 Tags: CV, Resume
 Authors: Matteo Gätzner
