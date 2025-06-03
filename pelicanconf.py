@@ -56,7 +56,7 @@ EXTRA_PATH_METADATA = {
     "extras/favicon-32x32.png": {"path": "favicon-32x32.png"},
     "extras/favicon.ico": {"path": "favicon.ico"},
     "extras/manifest.json": {"path": "manifest.json"},
-    "extra/CNAME": {"path": "CNAME"},
+    "extras/CNAME": {"path": "CNAME"},
 }
 RFG_FAVICONS = True
 
