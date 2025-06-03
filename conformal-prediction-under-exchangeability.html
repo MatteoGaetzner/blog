@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>  Conformal Prediction Under Exchangeability | Matteo Gätzner – Blog & Portfolio
+</title>
+  <link rel="canonical" href="https://MatteoGaetzner.github.io/blog/conformal-prediction-under-exchangeability.html">
+
+    <link rel="apple-touch-icon" href="https://MatteoGaetzner.github.io/blog/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" type="image/png" href="https://MatteoGaetzner.github.io/blog/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://MatteoGaetzner.github.io/blog/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="https://MatteoGaetzner.github.io/blog/manifest.json">
+    <meta name="theme-color" content="#333333">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css">
+  <link rel="stylesheet" href="https://MatteoGaetzner.github.io/blog/theme/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://MatteoGaetzner.github.io/blog/theme/css/pygments/default.min.css">
+  <link rel="stylesheet" href="https://MatteoGaetzner.github.io/blog/theme/css/theme.css">
+  <link rel="stylesheet" href="https://MatteoGaetzner.github.io/blog/theme/css/oldstyle.css">
+
+  <link rel="alternate" type="application/atom+xml" title="Full Atom Feed"
+        href="https://MatteoGaetzner.github.io/blog/feeds/all.atom.xml">
+  <link rel="alternate" type="application/atom+xml" title="Categories Atom Feed"
+        href="https://MatteoGaetzner.github.io/blog/feeds/statistics.atom.xml">  
+  <meta name="description" content="A quick introduction to the basics of conformal prediction under exchangeability.">
+
+
+    <script>
+    window.MathJax = {
+         loader: {load: ['[tex]/cases']},
+         tex: { 
+           inlineMath: [ 
+             ['\\(', '\\)'],
+             ['$',  '$']   
+           ], 
+           displayMath: [
+                ['$$','$$'],
+             ['\\[', '\\]'],
+            ], 
+           packages: ['base','ams', 'mathtools', 'cases'],
+        //     macros: {
+        //     coloneqq: ['\mathrel{\vcenter{:}}=', 0]
+        // }
+         }, 
+         svg: { 
+           fontCache: 'global' 
+         } 
+    };
+    </script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+  <!-- <script> -->
+  <!--     window.MathJax = { -->
+  <!--       tex: { -->
+  <!--         inlineMath: [ -->
+  <!--           ['\(', '\)'],   /* keep the \( … \) pair */ -->
+  <!--           ['$',  '$']       /* also pick up $ … $ */ -->
+  <!--         ], -->
+  <!--         displayMath: [['$$','$$']], -->
+  <!--         packages: ['base','ams'] -->
+  <!--       }, -->
+  <!--       svg: { -->
+  <!--         fontCache: 'global' -->
+  <!--       } -->
+  <!--     }; -->
+  <!-- </script> -->
+  <!-- <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script> -->
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+<div class="row">
+    <div class="col-sm-4">
+      <a href="https://MatteoGaetzner.github.io/blog/">
+        <img class="img-fluid rounded" src=https://MatteoGaetzner.github.io/blog/images/header.jpg alt="Matteo Gätzner – Blog & Portfolio">
+      </a>
+    </div>
+  <div class="col-sm-8">
+    <h1 class="title"><a href="https://MatteoGaetzner.github.io/blog/">Matteo Gätzner – Blog & Portfolio</a></h1>
+      <p class="text-muted">Projects, insights & thoughts</p>
+      <ul class="list-inline">
+            <li class="list-inline-item"><a href="https://MatteoGaetzner.github.io/blog/about/">About</a></li>
+            <li class="list-inline-item"><a href="https://MatteoGaetzner.github.io/blog/resume/">Resume</a></li>
+            <li class=" list-inline-item text-muted">|</li>
+          <li class="list-inline-item"><a class="fab fa-github" href="https://github.com/MatteoGaetzner" target="_blank"></a></li>
+          <li class="list-inline-item"><a class="fab fa-linkedin" href="https://linkedin.com/in/matteo-g" target="_blank"></a></li>
+      </ul>
+  </div>
+</div>    </div>
+  </header>
+
+  <div class="main">
+    <div class="container">
+      <h1>  Conformal Prediction Under Exchangeability
+</h1>
+      <hr>
+  <article class="article">
+    <header>
+      <ul class="list-inline">
+        <li class="list-inline-item text-muted" title="2025-06-02T12:00:00+02:00">
+          <i class="fas fa-clock"></i>
+          Mon 02 June 2025
+        </li>
+        <li class="list-inline-item">
+          <i class="fas fa-folder-open"></i>
+          <a href="https://MatteoGaetzner.github.io/blog/category/statistics.html">Statistics</a>
+        </li>
+          <li class="list-inline-item">
+            <i class="fas fa-tag"></i>
+              <a href="https://MatteoGaetzner.github.io/blog/tag/conformal-prediction.html">#conformal-prediction</a>,               <a href="https://MatteoGaetzner.github.io/blog/tag/exchangeability.html">#exchangeability</a>          </li>
+      </ul>
+    </header>
+    <div class="content">
+      <p>Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> <em>Theoretical Foundations of Conformal Prediction</em>, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich. </p>
+<p>Download the slide deck here: <a href="../files/conformal-slides.pdf" target="_blank">Download the slides</a>.</p>
+<h2>Uncertainty Quantification for Predictions</h2>
+<p>Say you have data points $(X_i, Y_i) \in \mathcal{X} \times \mathcal{Y}$. For a
+regression task, that could mean $(X_i, Y_i) \in \mathbb{R}^d \times
+\mathbb{R}$. A common task is to then predict unknown label $Y_{n+1}$ given known
+input $X_{n+1}$ using some predictive model $\hat{f}(X_{n+1})$ that could for
+example be a neural network, linear model or a smoothing spline.</p>
+<p>Now, even if the model's performance seems good empirically — say it has a low
+cross-validated $R^2$ score — we have no real guarantee that inference time
+predictions are accurate. </p>
+<p>The solution that conformal prediction proposes is to construct a <em>prediction
+set</em> $\, \mathcal{C}(X_{n+1}) \subseteq \mathcal{Y}$ based on $\hat{f}$ and get
+guarantees for $\mathcal{C}(X_{n+1}).$ The guarantee is called <em>marginal coverage</em>
+and says that the prediction set contains the true label $Y_{n+1}$ with high
+probability, symbolically
+$$
+\Pr(Y_{n+1} \in \mathcal{C}(X_{n+1})) \geq 1 - \alpha
+$$
+where $\alpha \in (0, 1)$ is a user-specified error level that shrinks or
+expands the prediction set accordingly. A large prediction set implies high
+uncertainty while a small one implies low uncertainty.</p>
+<p>Of course, there are other solutions for quantifying predictive uncertainty,
+however most rely on assumptions about the predictive model, asymptotics, limit
+theorems, Gaussian approximations or strong assumptions on the data-generating
+distribution. What makes conformal prediction such a powerful method is that it
+doesn't do that. It doesn't need assumptions about the predictive model, like
+that its linear, only uses certain (neural network) layers, makes
+deterministic predictions or that its predictions accurate. </p>
+<p>Although we get marginal coverage for poor models too, its still worth
+investing into a good predictive model since the corresponding prediction sets
+depend on its performance. Good models tend to produce tight, informative
+prediction sets. Weak models tend to produce large, uninformative ones.</p>
+<p>Furthermore, marginal coverage isn't a asymptotic guarantee; it can be achieved
+with finite datasets, finite model sizes and finite time. </p>
+<p>We do need a minimal assumption on the data-generating distribution though,
+namely <em>exchangeability</em>.</p>
+<hr>
+<h2>Exchangeability</h2>
+<p>Let $Z_1, \dots Z_n \in \mathcal{Z}$ be random variables with a joint
+distribution. We say that the random vector $ (Z_1, \dots, Z_n) $ is
+<em>exchangeable</em> if, for every permutation $\sigma \in \mathcal{S}_n$,</p>
+<p>$$
+(Z_1, \dots, Z_n) 
+\overset{d}{=}
+(Z_{\sigma(1)}, \dots, Z_{\sigma(n)})
+$$</p>
+<p>where $\overset{d}{=}$ denotes equality in distribution, and $S_n$ is the set
+of all permutations on $ [n] \coloneqq \{1, \dots, n\} $.</p>
+<h2>Equality in Distribution</h2>
+<p>Recall that two real‐valued random variables $Z_1$ and $Z_2$ are <em>equal in distribution</em>, written</p>
+<p>$$
+Z_1 \;\overset{d}{=}\; Z_2,
+$$</p>
+<p>if for every $z\in\mathbb{R}$,</p>
+<p>$$
+\Pr\bigl(Z_1 \le z\bigr)
+\;=\;
+\Pr\bigl(Z_2 \le z\bigr).
+$$</p>
+<p>Equivalently, for every (Borel) set $A\subseteq\mathbb{R}$,</p>
+<p>$$
+\Pr\bigl(Z_1\in A\bigr)
+\;=\;
+\Pr\bigl(Z_2\in A\bigr).
+$$</p>
+<p>In the context of exchangeability, we require that any finite tuple $(Z_1,\dots,Z_n)$ has the same joint law as its arbitrarily permuted version $(Z_{\sigma(1)},\dots,Z_{\sigma(n)})$.</p>
+<h2>Exchangeability for Infinite Sequences</h2>
+<p>An infinite sequence $Z_1,Z_2,Z_3,\dots$ taking values in the same space $\mathcal{Z}$ is called <em>exchangeable</em> if every finite truncation $(Z_1,\dots,Z_n)$ is exchangeable in the sense above. In particular, for every $n$ and every permutation $\sigma$ of ${1,\dots,n}$,</p>
+<p>$$
+(Z_1,\dots,Z_n)
+\;\overset{d}{=}\;
+(Z_{\sigma(1)},\dots,Z_{\sigma(n)}).
+$$</p>
+<p>This simply ensures that no matter how many observations one looks at—$n=1,2,3,\dots$—their joint distribution does not change when you reorder them.</p>
+<h2>Exchangeability Intuition</h2>
+<p>Informally put, an exchangeable sequence "doesn’t care" about the order in which data arrive. Any permutation of the observations is equally likely. Here are two common scenarios in which exchangeability holds.</p>
+<p><strong>Scenario 1 (i.i.d. data):</strong>
+If $Z_1,\dots,Z_n$ are i.i.d. draws from some distribution $P$, then obviously</p>
+<p>$$
+\Pr(Z_1=z_1,\dots,Z_n=z_n)
+\;=\;
+\prod_{i=1}^n P(Z_i=z_i)
+\;=\;
+\Pr(Z_{\sigma(1)}=z_1,\dots,Z_{\sigma(n)}=z_n)
+$$</p>
+<p>for any permutation $\sigma$. Hence i.i.d. implies exchangeable.</p>
+<p><strong>Scenario 2 (sampling without replacement):</strong>
+Suppose you draw $n$ items from a finite population ${z_1,\dots,z_N}$ uniformly <em>without replacement</em>. Then each ordered‐tuple of $n$ distinct draws is equally likely, so any reordering of those $n$ draws has the same probability. Thus the sequence is exchangeable (though not independent).</p>
+<h2>Setting</h2>
+<p>Let's summarize our assumptions and goal. We'll assume an exchangeable dataset of size $n+1$:</p>
+<p>$$
+(X_1,Y_1),\,(X_2,Y_2),\,\dots,\,\bigl(X_n,Y_n\bigr),\,\bigl(X_{n+1},Y_{n+1}\bigr)
+\;\in\;
+\mathcal{X}\times\mathcal{Y},
+$$</p>
+<p>all drawn from some (possibly unknown) joint distribution on $\mathcal{X}\times\mathcal{Y}$. Our goal is to predict $Y_{n+1}$ given $X_{n+1}$ and the first $n$ pairs. In order to do that with guarantees will construct a prediction set</p>
+<p>$$
+\mathcal{C}\bigl(X_{n+1}\bigr)\;\subseteq\;\mathcal{Y}
+$$</p>
+<p>that satisfies marginal coverage:</p>
+<p>$$
+\Pr\Bigl(Y_{n+1}\in \mathcal{C}(X_{n+1})\Bigr) \ge 1-\alpha,
+$$</p>
+<p>for a user‐specified $\alpha\in(0,1)$. </p>
+<hr>
+<h2>Score Functions</h2>
+<p>There are two flavours of conformal predicion, split conformal prediction and
+full conformal prediction. We'll define those procedures properly later and
+focus on a key ingredient in both for now.
+This key ingredient is a <strong>score function</strong>. Formally, a score function is any mapping</p>
+<p>$$
+s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R},
+$$</p>
+<p>where:</p>
+<ul>
+<li>The first argument $(x,y)$ is the <em>test point</em>.</li>
+<li>The second argument $\mathcal{D} = {(x_1,y_1),\dots,(x_k,y_k)}$ is any
+dataset (of size $k$) that you use to train your predictive model.</li>
+</ul>
+<p>Intuitively, $s\bigl((x,y);\mathcal{D}\bigr)$ measures how "badly" a model trained on $\mathcal{D}$ would predict $y$ at $x$. Larger scores indicate larger error.</p>
+<h3>Example Score Functions</h3>
+<p><strong>Residual score (regression):</strong>
+If $\hat f_{\mathcal{D}}$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D}$, then
+$$s\bigl((x,y);\mathcal{D}\bigr)
+\;=\;
+\bigl|\,y - \hat f(x; \mathcal{D})\bigr|.$$
+This is nonnegative and smaller when the prediction is good.</p>
+<p><strong>Conformal quantile regression (CQR) score (regression):</strong>
+Suppose $\hat{\tau}(x; z, \mathcal{D})$ estimates the $z$-th conditional quantile of $Y$ given $X = x$. One way to obtain $\hat{\tau}$ is to use a quantile regression method. We call 
+$$ s\bigl((x,y);\mathcal{D}\bigr)
+\;=\; \max\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\}$$
+the <em>CQR score</em>.
+This score function is nonnegative, and adapts to the conditional distribution of $Y$, producing smaller scores when $y$ lies near the estimated quantile and larger scores otherwise. This produces tighter prediction intervals where the model is more accurate and wider ones where it is less so. Because of its adaptability it is often considered a state-of-the-art score function for regression tasks.</p>
+<p><strong>Misclassification error (classification):</strong>
+If $\hat f(x; \mathcal{D})$ produces a predicted class label $\hat y$, then
+$$ s\bigl((x,y);\mathcal{D}\bigr)
+\;=\;
+\begin{cases}
+0, &amp;\text{if }\hat f(x; \mathcal{D}) = y, \newline
+1, &amp;\text{otherwise.}
+\end{cases} $$</p>
+<h2>Symmetry and When It’s Needed</h2>
+<p>Whether the score function must be <em>symmetric</em> (defined further below) in its dataset argument depends on which conformal flavor you use.</p>
+<h3>Split Conformal Prediction (no symmetry required)</h3>
+<p>In split conformal, one first partitions the available data into a <em>training set</em> $D_{\text{train}}$ and a <strong>calibration set</strong> $D$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as</p>
+<p>$$
+S_i
+\;=\;
+s\Bigl((X_i,Y_i)\;;\;\mathcal{D}_{\text{train}}\Bigr)
+\quad\text{for each index }i.
+$$</p>
+<p>Since the model $\hat{f}$ is trained once on the training set, the only
+"dataset argument" in each score is that fixed $\mathcal{D}_{\text{train}}$.
+In other words, each calibration score uses the same
+$\mathcal{D}_{\text{train}}$, so there is no need for the score function to
+be invariant under permuting different calibration points.  <strong>No symmetry
+condition is required</strong> for split conformal.</p>
+<h3>Full (Leave‐One‐Out) Conformal Prediction (symmetry required)</h3>
+<p>In full conformal, for each $i=1,\dots,n$, one trains a model $\hat f_{-i}$ on the data with $(X_i,Y_i)$ held out, defines</p>
+<p>$$
+S_i \;=\; s\Bigl((X_i,Y_i)\;;\;\mathcal{D}\setminus{(X_i,Y_i)}\Bigr),
+$$</p>
+<p>and then also scores the test point $(X_{n+1},y)$ via</p>
+<p>$$
+S_{n+1}
+\;=\;
+s\Bigl((X_{n+1},y)\;;\;\mathcal{D}\Bigr).
+$$</p>
+<p>Here $\mathcal{D} = {(X_1,Y_1),\dots,(X_n,Y_n)}$.  Because each held‐out model $\hat f_{-i}$ depends on the dataset $\mathcal{D}\setminus{(X_i,Y_i)}$, we need the score function to be <em>symmetric</em> in its second argument.  Concretely, </p>
+<p>A score function</p>
+<p>$$
+s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R}
+$$</p>
+<p>is called <em>symmetric</em> if, for any $(x,y)$ and any dataset $\mathcal{D}={(x_1,y_1),\dots,(x_k,y_k)}$, and for every permutation $\sigma$,</p>
+<p>$$
+s\bigl((x,y);\mathcal{D}\bigr)
+\;=\;
+s\bigl((x,y);\mathcal{D}_\sigma\bigr),
+$$</p>
+<p>where $\mathcal{D}_\sigma = \{(x_{\sigma(1)},y_{\sigma(1)}),\dots,(x_{\sigma(k)},y_{\sigma(k)})\}$.</p>
+<p>In other words, if you permute the order of the training points in $\mathcal{D}$, the score does not change. </p>
+<hr>
+<h2>The Full Conformal Prediction Procedure</h2>
+<p>In full conformal prediction, we “invert” a chosen score function to determine which candidate labels $y$ are consistent with our data. In other words, for each possible $y\in\mathcal{Y}$, we check whether inserting $(X_{n+1},y)$ into our dataset yields a conformity score that is not unreasonably large compared to the other scores.</p>
+<h3>Notation</h3>
+<p>To make precise statements further below we'll first need to get some notation
+out of the way.
+To that end, denote the training set with $n$ data points as
+$$ \mathcal{D}_n 
+\;=\; 
+\bigl((X_1, Y_1),\,(X_2, Y_2),\,\dots,\,(X_n, Y_n)\bigr), $$
+and the training set with the additional test point as
+$$ \mathcal{D}_{n+1} 
+\;=\; 
+\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1}, Y_{n+1})\bigr). $$
+Of course, in reality, $Y_{n+1}$ is unknown, so we cannot form $\mathcal{D}_{n+1}$ directly.</p>
+<p>To see whether a particular label $y$ "fits" with the existing data, define the
+<em>augmented dataset</em> as
+$$ \mathcal{D}_{n+1}^y 
+\;=\; 
+\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\;(X_{n+1},\,y)\bigr). $$
+In this notation, $(X_{n+1},\,y)$ is what we call the <em>hypothesized test
+point</em>. The question becomes: if we pretend $Y_{n+1} = y$, does the full
+dataset $\mathcal{D}_{n+1}^y$ look "typical" under our chosen score function?</p>
+<p>For a given $y$, we compute a conformal score for each data point in $\mathcal{D}_{n+1}^y$, symbolically
+$$ S_i^y 
+\;=\; 
+\begin{cases}
+  s\bigl((X_i, Y_i);\,\mathcal{D}_{n+1}^y\bigr),
+    &amp; \text{for } i = 1,2,\ldots,n, \newline
+  s\bigl((X_{n+1},\,y);\,\mathcal{D}_{n+1}^y\bigr),
+    &amp; \text{for } i = n+1.
+\end{cases} $$
+In other words:</p>
+<ul>
+<li>For $i\le n$, we score the existing pair $(X_i,Y_i)$ against the entire augmented set.</li>
+<li>For $i=n+1$, we score the hypothesized test point $(X_{n+1},y)$ in the same way.</li>
+</ul>
+<h2>Full Conformal Prediction Set</h2>
+<p>Given our notation, fix any candidate label $y \in \mathcal{Y}$. By inserting $\,(X_{n+1},y)$ into the original training set $\mathcal{D}_n$, we obtain the augmented dataset</p>
+<p>$$
+\mathcal{D}_{n+1}^y \;=\; \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1},\,y)\bigr).
+$$</p>
+<p>Next, for each $i=1,\dots,n+1$, we compute the conformal score</p>
+<p>$$
+S_i^y 
+\;=\; 
+\begin{cases}
+  s\bigl((X_i,\,Y_i);\;\mathcal{D}_{n+1}^y\bigr), 
+    &amp; i = 1,2,\dots,n, \newline
+  s\bigl((X_{n+1},\,y);\;\mathcal{D}_{n+1}^y\bigr), 
+    &amp; i = n+1.
+\end{cases}
+$$</p>
+<p>That is, each existing data point $(X_i,Y_i)$ is scored against the entire augmented set, and the hypothesized test point $(X_{n+1},y)$ receives its own score in exactly the same manner. If $S_{n+1}^y$ ends up being large relative to ${S_1^y,\dots,S_n^y}$, then $y$ does not conform well to the data and should be excluded from the prediction set. Conversely, when $S_{n+1}^y$ is among the smallest $\lceil(n+1)(1-\alpha)\rceil$ values of the combined list ${S_1^y,\dots,S_{n+1}^y}$, we deem $y$ sufficiently consistent and include it in our full conformal prediction set. Formally, letting</p>
+<p>$$
+\hat{q}^y 
+\;=\; 
+\text{Quantile}\bigl(S_1^y,\,S_2^y,\,\dots,\,S_n^y;\;(1-\alpha)(1 + 1/n)\bigr),
+$$</p>
+<p>we define</p>
+<p>$$
+\mathcal{C}(X_{n+1}) 
+\;=\; 
+\bigl\{\,y\in\mathcal{Y} : S_{n+1}^y \;\le\;\hat{q}^y \bigr\}.
+$$</p>
+<p>In other words, $\mathcal{C}(X_{n+1})$ is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the $n$ scores from ${(X_i,Y_i)}_{i=1}^n$. This construction intuitively inverts the score function: only those $y$ that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.</p>
+<hr>
+<h2>Computing $\mathcal{C}(X_{n+1})$</h2>
+<p>In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y}$, forms $\mathcal{D}_{n+1}^y$, computes $\{S_i^y\}_{i=1}^{n+1}$, finds the conformal quantile $\hat{q}^y$, and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute 
+$$
+\{\,y: S_{n+1}^y \le \hat q^y\}
+$$
+directly.
+A more brute‐force but generally applicable approach is to discretize the original label space $\mathcal{Y}$ and work with the newly constructed discrete label space. Section 9.2 of the book provides further details on this.</p>
+<h2>Marginal Coverage for Full Conformal Prediction</h2>
+<p>Under the following two conditions—first, that</p>
+<p>$$
+(X_1,Y_1),\,\dots,\,(X_{n+1},Y_{n+1})
+$$</p>
+<p>is exchangeable, and second, that the score function $s$ is symmetric in its dataset argument—the full conformal set $\mathcal{C}(X_{n+1})$ satisfies the marginal coverage guarantee</p>
+<p>$$
+\Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr) \ge 1-\alpha.
+$$</p>
+<p>We omit the proof here but it can be found on the slides and in the book. </p>
+<h2>Full Conformal Prediction Pseudocode</h2>
+<p>Below is the full conformal prediction routine in Python‐style pseudocode. It takes as input the observed training pairs <code>training_data</code>, a new feature vector <code>X_new</code>, a target miscoverage level <code>alpha</code>, a conformal <code>score_function</code>, and the label space <code>Y</code>. It outputs the prediction set <code>C</code>, consisting of all <code>y_candidate</code> whose score does not exceed the appropriate quantile of the calibration scores.</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">full_conformal_prediction</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="n">X_new</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">score_function</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="n">C</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">training_data</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">y_candidate</span> <span class="ow">in</span> <span class="n">Y</span><span class="p">:</span>
+        <span class="n">D_aug</span> <span class="o">=</span> <span class="n">training_data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">D_aug</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y_candidate</span><span class="p">))</span>
+
+        <span class="n">scores</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">X_i</span><span class="p">,</span> <span class="n">Y_i</span><span class="p">)</span> <span class="ow">in</span> <span class="n">training_data</span><span class="p">:</span>
+            <span class="n">scores</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">score_function</span><span class="p">((</span><span class="n">X_i</span><span class="p">,</span> <span class="n">Y_i</span><span class="p">),</span> <span class="n">D_aug</span><span class="p">))</span>
+
+        <span class="n">score_new</span> <span class="o">=</span> <span class="n">score_function</span><span class="p">((</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y_candidate</span><span class="p">),</span> <span class="n">D_aug</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">score_new</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">C</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">y_candidate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">C</span>
+</code></pre></div>
+
+<p>Full conformal gives exact coverage by retraining on every $(X_{n+1},y)$, but this can be expensive in practice. A more computationally efficient alternative is split conformal, where you explicitly choose a training set $\mathcal{D}_{\text{train}}$ and a separate calibration set $\mathcal{D}$, fit the model once on $\mathcal{D}_{\text{train}}$, and use $\mathcal{D}$ only to compute the calibration scores.</p>
+<h2>Split Conformal Prediction Pseudocode</h2>
+<div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">split_conformal_prediction</span><span class="p">(</span>
+    <span class="n">D_train</span><span class="p">,</span>
+    <span class="n">D</span><span class="p">,</span>
+    <span class="n">X_new</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="p">,</span>
+    <span class="n">score_function</span><span class="p">,</span>
+    <span class="n">Y</span>
+<span class="p">):</span>
+    <span class="n">calib_scores</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">score_function</span><span class="p">((</span><span class="n">X_i</span><span class="p">,</span> <span class="n">Y_i</span><span class="p">),</span> <span class="n">D_train</span><span class="p">)</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">X_i</span><span class="p">,</span> <span class="n">Y_i</span><span class="p">)</span> <span class="ow">in</span> <span class="n">D_calib</span>
+    <span class="p">]</span>
+    <span class="n">q</span> <span class="o">=</span> <span class="n">quantile</span><span class="p">(</span><span class="n">calib_scores</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">C</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">y_candidate</span> <span class="ow">in</span> <span class="n">Y</span><span class="p">:</span>
+        <span class="n">s_new</span> <span class="o">=</span> <span class="n">score_function</span><span class="p">((</span><span class="n">X_new</span><span class="p">,</span> <span class="n">y_candidate</span><span class="p">),</span> <span class="n">D</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">s_new</span> <span class="o">&lt;=</span> <span class="n">q</span><span class="p">:</span>
+            <span class="n">C</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">y_candidate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">C</span>
+</code></pre></div>
+
+<p>Under exchangeability, this split conformal procedure still guarantees</p>
+<p>$$
+\Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr)\;\ge\;1-\alpha,
+$$</p>
+<p>but requires only a single model fit on $\mathcal{D}_{\text{train}}$ and straightforward calibration on $\mathcal{D}$.</p>
+<h2>Full vs. Split Conformal: Trade-Offs</h2>
+<p>As we have seen, full conformal prediction uses every available data point both to train the model and to compute calibration scores. In practice, this means that for each candidate label $y$, one must retrain $\hat f$ on the augmented dataset that includes $(X_{n+1},y)$. Because the score function $s\bigl((x,y);\mathcal{D}\bigr)$ is evaluated anew for each hypothetical $(X_{n+1},y)$, full conformal requires a symmetric score function and incurs a large computational cost whenever $\mathcal{Y}$ is large or continuous.</p>
+<p>By contrast, split conformal divides the data into two disjoint subsets—one for fitting the model and one for calibration. After training $\hat f$ on the first portion, calibration scores are computed only once on the held-out subset, and the same quantile threshold is used to test all $y\in\mathcal{Y}$. Because no retraining is needed when evaluating different labels, split conformal greatly reduces computational effort and works with any (pretrained) score function $s$.</p>
+<p>From a statistical perspective, however, full conformal enjoys an advantage: it leverages all $n$ observations both to fit $\hat f$ and to calibrate, yielding typically tighter prediction sets $\mathcal{C}(X_{n+1})$. Split conformal, which trains on only part of the data, often produces larger sets because less information is available during model fitting. In other words, split conformal is <strong>computationally</strong> more efficient (one model fit versus many), while full conformal is <strong>statistically</strong> more efficient (using all data for both training and calibration).</p>
+<h2>Summary</h2>
+<p>In this post, we introduced conformal prediction under the sole assumption of exchangeability. We began by motivating the need for reliable uncertainty quantification—showing that even a high cross‐validated $R^2$ offers no formal guarantee at inference time. Conformal prediction remedies this by constructing a prediction set $\mathcal{C}(X_{n+1})\subseteq\mathcal{Y}$ that enjoys finite‐sample marginal coverage:</p>
+<p>$$
+\Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr)\;\ge\;1-\alpha,
+$$</p>
+<p>without any distributional or model‐specific assumptions beyond exchangeability. We defined exchangeability (finite and infinite sequences) and saw intuitive examples—i.i.d. draws and sampling without replacement—where the joint law remains invariant under permutation.</p>
+<p>We then introduced the central notion of a conformal score $s\bigl((x,y);\mathcal{D}\bigr)$, which measures how "nonconforming" a hypothetical label $y$ is at feature $x$ given dataset $\mathcal{D}$. Common choices include the absolute residual and the quantile‐based CQR score. In split conformal prediction, a single model is trained on half the data, calibration scores are computed on the other half, and the quantile of those scores determines the prediction set—requiring only one model fit. In full conformal prediction, we "invert" the score by hypothetically appending $(X_{n+1},y)$ to the entire dataset for each $y\in\mathcal{Y}$, computing all $n+1$ scores, and including those $y$ whose score is no larger than the appropriate quantile. Python‐style pseudocode was provided for both full and split conformal, with split conformal being computationally lighter yet still guaranteeing marginal coverage under exchangeability.</p>
+<p>While this post distilled—and in some places almost verbatim reproduced—Section 3 of <em>Theoretical Foundations of Conformal Prediction</em>, the book<sup id="fnref2:1"><a class="footnote-ref" href="#fn:1">1</a></sup> goes much further. Chapters beyond Chapter 3 explore conditional coverage, a model‐based perspective on conformal prediction, and various extensions (e.g. weighted or cross-validation based methods). The authors Anastasios N. Angelopoulos, Rina Foygel Barber, and Stephen Bates also address whether conformal sets can be overly conservative and how to use conformal prediction under weaker or different assumptions.</p>
+<div class="footnote">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Angelopoulos, A. N., Foygel Barber, R., &amp; Bates, S. (2020). <em>Conformal prediction under exchangeability</em> (Chap. 3). In <em>Theoretical Foundations of Conformal Prediction</em> (pp. 20–36). Cambridge University Press&#160;<a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text">&#8617;</a><a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text">&#8617;</a></p>
+</li>
+</ol>
+</div>
+    </div>
+  </article>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+<div class="row">
+  <ul class="col-sm-6 list-inline">
+    <li class="list-inline-item"><a href="https://MatteoGaetzner.github.io/blog/archives.html">Archives</a></li>
+    <li class="list-inline-item"><a href="https://MatteoGaetzner.github.io/blog/categories.html">Categories</a></li>
+      <li class="list-inline-item"><a href="https://MatteoGaetzner.github.io/blog/tags.html">Tags</a></li>
+  </ul>
+  <p class="col-sm-6 text-sm-right text-muted">
+    Generated by <a href="https://github.com/getpelican/pelican" target="_blank">Pelican</a>
+    / <a href="https://github.com/nairobilug/pelican-alchemy" target="_blank">&#x2728;</a>
+  </p>
+</div>    </div>
+  </footer>
+
+</body>
+
+</html>
