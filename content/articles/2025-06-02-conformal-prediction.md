@@ -7,7 +7,7 @@ Summary: A quick introduction to the basics of conformal prediction under exchan
 
 Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book[^1] _Theoretical Foundations of Conformal Prediction_, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich. 
 
-Download the slide deck here: [Download the slides](../files/conformal-slides.pdf){:target="_blank"}.
+Download the slide deck here: [Download the slides](files/conformal-slides.pdf){:target="_blank"}.
 
 ## Uncertainty Quantification for Predictions
 
