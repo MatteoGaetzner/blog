@@ -58,3 +58,6 @@ EXTRA_PATH_METADATA = {
     "extras/manifest.json": {"path": "manifest.json"},
 }
 RFG_FAVICONS = True
+
+# Code
+PYGMENTS_STYLE = "default"

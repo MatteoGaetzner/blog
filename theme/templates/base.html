@@ -37,22 +37,47 @@
   {% include 'include/xml_feeds.html' %}
   {% block head %}{% endblock %}
   {% include 'include/analytics.html' %}
-  <script>
-      window.MathJax = {
-        tex: {
-          inlineMath: [
-            ['\\(', '\\)'],   /* keep the \( … \) pair */
-            ['$',  '$']       /* also pick up $ … $ */
-          ],
-          displayMath: [['$$','$$']],
-          packages: ['base','ams']
-        },
-        svg: {
-          fontCache: 'global'
-        }
-      };
-  </script>
-  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <script>
+    window.MathJax = {
+         loader: {load: ['[tex]/cases']},
+         tex: { 
+           inlineMath: [ 
+             ['\\(', '\\)'],
+             ['$',  '$']   
+           ], 
+           displayMath: [
+                ['$$','$$'],
+             ['\\[', '\\]'],
+            ], 
+           packages: ['base','ams', 'mathtools', 'cases'],
+        //     macros: {
+        //     coloneqq: ['\mathrel{\vcenter{:}}=', 0]
+        // }
+         }, 
+         svg: { 
+           fontCache: 'global' 
+         } 
+    };
+    </script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+  <!-- <script> -->
+  <!--     window.MathJax = { -->
+  <!--       tex: { -->
+  <!--         inlineMath: [ -->
+  <!--           ['\(', '\)'],   /* keep the \( … \) pair */ -->
+  <!--           ['$',  '$']       /* also pick up $ … $ */ -->
+  <!--         ], -->
+  <!--         displayMath: [['$$','$$']], -->
+  <!--         packages: ['base','ams'] -->
+  <!--       }, -->
+  <!--       svg: { -->
+  <!--         fontCache: 'global' -->
+  <!--       } -->
+  <!--     }; -->
+  <!-- </script> -->
+  <!-- <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script> -->
 </head>
 
 <body>
