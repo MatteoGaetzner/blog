@@ -203,7 +203,7 @@ Whether the score function must be *symmetric* (defined further below) in its da
 
 ### Split Conformal Prediction (no symmetry required)
 
-In split conformal, one first partitions the available data into a *training set* $D\_{\text{train}}$ and a **calibration set** $D$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as
+In split conformal, one first partitions the available data into a *training set* $\mathcal{D}\_{\text{train}}$ and a **calibration set** $\mathcal{D}$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as
 
 $$
 S_i
