@@ -144,7 +144,7 @@ $$ s\bigl((x,y);\mathcal{D}\bigr)
 &lt;h2&gt;Symmetry and When It’s Needed&lt;/h2&gt;
 &lt;p&gt;Whether the score function must be &lt;em&gt;symmetric&lt;/em&gt; (defined further below) in its dataset argument depends on which conformal flavor you use.&lt;/p&gt;
 &lt;h3&gt;Split Conformal Prediction (no symmetry required)&lt;/h3&gt;
-&lt;p&gt;In split conformal, one first partitions the available data into a &lt;em&gt;training set&lt;/em&gt; $D_{\text{train}}$ and a &lt;strong&gt;calibration set&lt;/strong&gt; $D$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as&lt;/p&gt;
+&lt;p&gt;In split conformal, one first partitions the available data into a &lt;em&gt;training set&lt;/em&gt; $\mathcal{D}_{\text{train}}$ and a &lt;strong&gt;calibration set&lt;/strong&gt; $\mathcal{D}$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as&lt;/p&gt;
 &lt;p&gt;$$
 S_i
 \;=\;
