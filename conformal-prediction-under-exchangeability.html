@@ -240,7 +240,7 @@ dataset (of size $k$) that you use to train your predictive model.</li>
 <p>Intuitively, $s\bigl((x,y);\mathcal{D}\bigr)$ measures how "badly" a model trained on $\mathcal{D}$ would predict $y$ at $x$. Larger scores indicate larger error.</p>
 <h3>Example Score Functions</h3>
 <p><strong>Residual score (regression):</strong>
-If $\hat f_{\mathcal{D}}$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D},$ then
+If $\hat{f}(\cdot, {\mathcal{D})$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D},$ then
 $$s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
 \bigl|\,y - \hat f(x; \mathcal{D})\bigr|.$$
