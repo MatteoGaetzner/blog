@@ -117,7 +117,7 @@
       </ul>
     </header>
     <div class="content">
-      <p>Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> <em>Theoretical Foundations of Conformal Prediction</em>, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich. </p>
+      <p>Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book<sup id="fnref:1"><a class="footnote-ref" href="#fn:1">1</a></sup> <em>Theoretical Foundations of Conformal Prediction</em>, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich.</p>
 <p>Download the slide deck here: <a href="files/conformal-slides.pdf" target="_blank">Download the slides</a>.</p>
 <h2>Uncertainty Quantification for Predictions</h2>
 <p>Say you have data points $(X_i, Y_i) \in \mathcal{X} \times \mathcal{Y}$. For a
@@ -127,16 +127,16 @@ input $X_{n+1}$ using some predictive model $\hat{f}(X_{n+1})$ that could for
 example be a neural network, linear model or a smoothing spline.</p>
 <p>Now, even if the model's performance seems good empirically — say it has a low
 cross-validated $R^2$ score — we have no real guarantee that inference time
-predictions are accurate. </p>
+predictions are accurate.</p>
 <p>The solution that conformal prediction proposes is to construct a <em>prediction
 set</em> $\, \mathcal{C}(X_{n+1}) \subseteq \mathcal{Y}$ based on $\hat{f}$ and get
 guarantees for $\mathcal{C}(X_{n+1}).$ The guarantee is called <em>marginal coverage</em>
 and says that the prediction set contains the true label $Y_{n+1}$ with high
-probability, symbolically
-$$
+probability, symbolically</p>
+<p>$$
 \Pr(Y_{n+1} \in \mathcal{C}(X_{n+1})) \geq 1 - \alpha
-$$
-where $\alpha \in (0, 1)$ is a user-specified error level that shrinks or
+$$</p>
+<p>where $\alpha \in (0, 1)$ is a user-specified error level that shrinks or
 expands the prediction set accordingly. A large prediction set implies high
 uncertainty while a small one implies low uncertainty.</p>
 <p>Of course, there are other solutions for quantifying predictive uncertainty,
@@ -145,22 +145,22 @@ theorems, Gaussian approximations or strong assumptions on the data-generating
 distribution. What makes conformal prediction such a powerful method is that it
 doesn't do that. It doesn't need assumptions about the predictive model, like
 that its linear, only uses certain (neural network) layers, makes
-deterministic predictions or that its predictions accurate. </p>
+deterministic predictions or that its predictions accurate.</p>
 <p>Although we get marginal coverage for poor models too, its still worth
 investing into a good predictive model since the corresponding prediction sets
 depend on its performance. Good models tend to produce tight, informative
 prediction sets. Weak models tend to produce large, uninformative ones.</p>
 <p>Furthermore, marginal coverage isn't a asymptotic guarantee; it can be achieved
-with finite datasets, finite model sizes and finite time. </p>
+with finite datasets, finite model sizes and finite time.</p>
 <p>We do need a minimal assumption on the data-generating distribution though,
 namely <em>exchangeability</em>.</p>
 <hr>
 <h2>Exchangeability</h2>
 <p>Let $Z_1, \dots Z_n \in \mathcal{Z}$ be random variables with a joint
-distribution. We say that the random vector $ (Z_1, \dots, Z_n) $ is
-<em>exchangeable</em> if, for every permutation $\sigma \in \mathcal{S}_n,$</p>
+distribution. We say that the random vector $ (Z<em>1, \dots, Z_n) $ is
+_exchangeable</em> if, for every permutation $\sigma \in \mathcal{S}_n,$</p>
 <p>$$
-(Z_1, \dots, Z_n) 
+(Z_1, \dots, Z_n)
 \overset{d}{=}
 (Z_{\sigma(1)}, \dots, Z_{\sigma(n)})
 $$</p>
@@ -221,7 +221,7 @@ $$</p>
 <p>$$
 \Pr\Bigl(Y_{n+1}\in \mathcal{C}(X_{n+1})\Bigr) \ge 1-\alpha,
 $$</p>
-<p>for a user‐specified $\alpha\in(0,1)$. </p>
+<p>for a user‐specified $\alpha\in(0,1)$.</p>
 <hr>
 <h2>Score Functions</h2>
 <p>There are two flavours of conformal predicion, split conformal prediction and
@@ -235,34 +235,40 @@ $$</p>
 <ul>
 <li>The first argument $(x,y)$ is the <em>test point</em>.</li>
 <li>The second argument $\mathcal{D} = {(x_1,y_1),\dots,(x_k,y_k)}$ is any
-dataset (of size $k$) that you use to train your predictive model.</li>
+  dataset (of size $k$) that you use to train your predictive model.</li>
 </ul>
 <p>Intuitively, $s\bigl((x,y);\mathcal{D}\bigr)$ measures how "badly" a model trained on $\mathcal{D}$ would predict $y$ at $x$. Larger scores indicate larger error.</p>
 <h3>Example Score Functions</h3>
 <p><strong>Residual score (regression):</strong>
-If $\hat{f}(\cdot, {\mathcal{D})$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D},$ then
-$$s\bigl((x,y);\mathcal{D}\bigr)
+If $\hat{f}(\cdot, \mathcal{D})$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D},$ then</p>
+<p>$$
+s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
-\bigl|\,y - \hat f(x; \mathcal{D})\bigr|.$$
-This is nonnegative and smaller when the prediction is good.</p>
+\bigl|\,y - \hat f(x; \mathcal{D})\bigr|.
+$$</p>
+<p>This is nonnegative and smaller when the prediction is good.</p>
 <p><strong>Conformal quantile regression (CQR) score (regression):</strong>
-Suppose $\hat{\tau}(x; z, \mathcal{D})$ estimates the $z$-th conditional quantile of $Y$ given $X = x$. One way to obtain $\hat{\tau}$ is to use a quantile regression method. We call 
-$$ s\bigl((x,y);\mathcal{D}\bigr)
-\;=\; \max\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\}$$
-the <em>CQR score</em>.
+Suppose $\hat{\tau}(x; z, \mathcal{D})$ estimates the $z$-th conditional quantile of $Y$ given $X = x$. One way to obtain $\hat{\tau}$ is to use a quantile regression method. We call</p>
+<p>$$
+s\bigl((x,y);\mathcal{D}\bigr)
+\;=\; \max\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\}
+$$</p>
+<p>the <em>CQR score</em>.
 This score function is nonnegative, and adapts to the conditional distribution of $Y,$ producing smaller scores when $y$ lies near the estimated quantile and larger scores otherwise. This produces tighter prediction intervals where the model is more accurate and wider ones where it is less so. Because of its adaptability it is often considered a state-of-the-art score function for regression tasks.</p>
 <p><strong>Misclassification error (classification):</strong>
-If $\hat f(x; \mathcal{D})$ produces a predicted class label $\hat y,$ then
-$$ s\bigl((x,y);\mathcal{D}\bigr)
+If $\hat f(x; \mathcal{D})$ produces a predicted class label $\hat y,$ then</p>
+<p>$$
+s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
 \begin{cases}
 0, &amp;\text{if }\hat f(x; \mathcal{D}) = y, \newline
 1, &amp;\text{otherwise.}
-\end{cases} $$</p>
+\end{cases}
+$$</p>
 <h2>Symmetry and When It’s Needed</h2>
 <p>Whether the score function must be <em>symmetric</em> (defined further below) in its dataset argument depends on which conformal flavor you use.</p>
 <h3>Split Conformal Prediction (no symmetry required)</h3>
-<p>In split conformal, one first partitions the available data into a <em>training set</em> $\mathcal{D}_{\text{train}}$ and a <strong>calibration set</strong> $\mathcal{D}$.  A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as</p>
+<p>In split conformal, one first partitions the available data into a <em>training set</em> $\mathcal{D}_{\text{train}}$ and a <strong>calibration set</strong> $\mathcal{D}$. A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as</p>
 <p>$$
 S_i
 \;=\;
@@ -273,7 +279,7 @@ $$</p>
 "dataset argument" in each score is that fixed $\mathcal{D}_{\text{train}}$.
 In other words, each calibration score uses the same
 $\mathcal{D}_{\text{train}},$ so there is no need for the score function to
-be invariant under permuting different calibration points.  <strong>No symmetry
+be invariant under permuting different calibration points. <strong>No symmetry
 condition is required</strong> for split conformal.</p>
 <h3>Full (Leave‐One‐Out) Conformal Prediction (symmetry required)</h3>
 <p>In full conformal, for each $i \in \{1,\dots,n\},$ one trains a model $\hat f_{-i}$ on the data with $(X_i,Y_i)$ held out, defines</p>
@@ -286,7 +292,7 @@ S_{n+1}
 \;=\;
 s\Bigl((X_{n+1},y)\;;\;\mathcal{D}\Bigr).
 $$</p>
-<p>Here $\mathcal{D} = {(X_1,Y_1),\dots,(X_n,Y_n)}$.  Because each held‐out model $\hat f_{-i}$ depends on the dataset $\mathcal{D}\setminus{(X_i,Y_i)},$ we need the score function to be <em>symmetric</em> in its second argument.  Concretely, </p>
+<p>Here $\mathcal{D} = {(X_1,Y_1),\dots,(X_n,Y_n)}$. Because each held‐out model $\hat f_{-i}$ depends on the dataset $\mathcal{D}\setminus{(X_i,Y_i)},$ we need the score function to be <em>symmetric</em> in its second argument. Concretely,</p>
 <p>A score function</p>
 <p>$$
 s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R}
@@ -298,40 +304,48 @@ s\bigl((x,y);\mathcal{D}\bigr)
 s\bigl((x,y);\mathcal{D}_\sigma\bigr),
 $$</p>
 <p>where $\mathcal{D}_\sigma = \{(x_{\sigma(1)},y_{\sigma(1)}),\dots,(x_{\sigma(k)},y_{\sigma(k)})\}$.</p>
-<p>In other words, if you permute the order of the training points in $\mathcal{D},$ the score does not change. </p>
+<p>In other words, if you permute the order of the training points in $\mathcal{D},$ the score does not change.</p>
 <hr>
 <h2>The Full Conformal Prediction Procedure</h2>
 <p>In full conformal prediction, we “invert” a chosen score function to determine which candidate labels $y$ are consistent with our data. In other words, for each possible $y\in\mathcal{Y},$ we check whether inserting $(X_{n+1},y)$ into our dataset yields a conformity score that is not unreasonably large compared to the other scores.</p>
 <h3>Notation</h3>
 <p>To make precise statements further below we'll first need to get some notation
 out of the way.
-To that end, denote the training set with $n$ data points as
-$$ \mathcal{D}_n 
-\;=\; 
-\bigl((X_1, Y_1),\,(X_2, Y_2),\,\dots,\,(X_n, Y_n)\bigr), $$
-and the training set with the additional test point as
-$$ \mathcal{D}_{n+1} 
-\;=\; 
-\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1}, Y_{n+1})\bigr). $$
-Of course, in reality, $Y_{n+1}$ is unknown, so we cannot form $\mathcal{D}_{n+1}$ directly.</p>
+To that end, denote the training set with $n$ data points as</p>
+<p>$$
+\mathcal{D}_n
+\;=\;
+\bigl((X_1, Y_1),\,(X_2, Y_2),\,\dots,\,(X_n, Y_n)\bigr),
+$$</p>
+<p>and the training set with the additional test point as</p>
+<p>$$
+\mathcal{D}_{n+1}
+\;=\;
+\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1}, Y_{n+1})\bigr).
+$$</p>
+<p>Of course, in reality, $Y_{n+1}$ is unknown, so we cannot form $\mathcal{D}_{n+1}$ directly.</p>
 <p>To see whether a particular label $y$ "fits" with the existing data, define the
-<em>augmented dataset</em> as
-$$ \mathcal{D}_{n+1}^y 
-\;=\; 
-\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\;(X_{n+1},\,y)\bigr). $$
-In this notation, $(X_{n+1},\,y)$ is what we call the <em>hypothesized test
+<em>augmented dataset</em> as</p>
+<p>$$
+\mathcal{D}_{n+1}^y
+\;=\;
+\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\;(X_{n+1},\,y)\bigr).
+$$</p>
+<p>In this notation, $(X_{n+1},\,y)$ is what we call the <em>hypothesized test
 point</em>. The question becomes: if we pretend $Y_{n+1} = y,$ does the full
 dataset $\mathcal{D}_{n+1}^y$ look "typical" under our chosen score function?</p>
-<p>For a given $y,$ we compute a conformal score for each data point in $\mathcal{D}_{n+1}^y,$ symbolically
-$$ S_i^y 
-\;=\; 
+<p>For a given $y,$ we compute a conformal score for each data point in $\mathcal{D}_{n+1}^y,$ symbolically</p>
+<p>$$
+S_i^y
+\;=\;
 \begin{cases}
   s\bigl((X_i, Y_i);\,\mathcal{D}_{n+1}^y\bigr),
     &amp; \text{for } i = 1,2,\ldots,n, \newline
   s\bigl((X_{n+1},\,y);\,\mathcal{D}_{n+1}^y\bigr),
     &amp; \text{for } i = n+1.
-\end{cases} $$
-In other words:</p>
+\end{cases}
+$$</p>
+<p>In other words:</p>
 <ul>
 <li>For $i\le n,$ we score the existing pair $(X_i,Y_i)$ against the entire augmented set.</li>
 <li>For $i=n+1,$ we score the hypothesized test point $(X_{n+1},y)$ in the same way.</li>
@@ -343,35 +357,35 @@ In other words:</p>
 $$</p>
 <p>Next, for each $i=1,\dots,n+1,$ we compute the conformal score</p>
 <p>$$
-S_i^y 
-\;=\; 
+S_i^y
+\;=\;
 \begin{cases}
-  s\bigl((X_i,\,Y_i);\;\mathcal{D}_{n+1}^y\bigr), 
+  s\bigl((X_i,\,Y_i);\;\mathcal{D}_{n+1}^y\bigr),
     &amp; i = 1,2,\dots,n, \newline
-  s\bigl((X_{n+1},\,y);\;\mathcal{D}_{n+1}^y\bigr), 
+  s\bigl((X_{n+1},\,y);\;\mathcal{D}_{n+1}^y\bigr),
     &amp; i = n+1.
 \end{cases}
 $$</p>
 <p>That is, each existing data point $(X_i,Y_i)$ is scored against the entire augmented set, and the hypothesized test point $(X_{n+1},y)$ receives its own score in exactly the same manner. If $S_{n+1}^y$ ends up being large relative to ${S_1^y,\dots,S_n^y},$ then $y$ does not conform well to the data and should be excluded from the prediction set. Conversely, when $S_{n+1}^y$ is among the smallest $\lceil(n+1)(1-\alpha)\rceil$ values of the combined list ${S_1^y,\dots,S_{n+1}^y},$ we deem $y$ sufficiently consistent and include it in our full conformal prediction set. Formally, letting</p>
 <p>$$
-\hat{q}^y 
-\;=\; 
+\hat{q}^y
+\;=\;
 \text{Quantile}\bigl(S_1^y,\,S_2^y,\,\dots,\,S_n^y;\;(1-\alpha)(1 + 1/n)\bigr),
 $$</p>
 <p>we define</p>
 <p>$$
-\mathcal{C}(X_{n+1}) 
-\;=\; 
+\mathcal{C}(X_{n+1})
+\;=\;
 \bigl\{\,y\in\mathcal{Y} : S_{n+1}^y \;\le\;\hat{q}^y \bigr\}.
 $$</p>
 <p>In other words, $\mathcal{C}(X_{n+1})$ is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the $n$ scores from ${(X_i,Y_i)}_{i=1}^n$. This construction intuitively inverts the score function: only those $y$ that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.</p>
 <hr>
 <h2>Computing $\mathcal{C}(X_{n+1})$</h2>
-<p>In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y},$ forms $\mathcal{D}_{n+1}^y,$ computes $\{S_i^y\}_{i=1}^{n+1},$ finds the conformal quantile $\hat{q}^y,$ and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute 
-$$
+<p>In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y},$ forms $\mathcal{D}_{n+1}^y,$ computes $\{S_i^y\}_{i=1}^{n+1},$ finds the conformal quantile $\hat{q}^y,$ and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute</p>
+<p>$$
 \{\,y: S_{n+1}^y \le \hat q^y\}
-$$
-directly.
+$$</p>
+<p>directly.
 A more brute‐force but generally applicable approach is to discretize the original label space $\mathcal{Y}$ and work with the newly constructed discrete label space. Section 9.2 of the book provides further details on this.</p>
 <h2>Marginal Coverage for Full Conformal Prediction</h2>
 <p>Under the following two conditions—first, that</p>
@@ -382,7 +396,7 @@ $$</p>
 <p>$$
 \Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr) \ge 1-\alpha.
 $$</p>
-<p>We omit the proof here but it can be found on the slides and in the book. </p>
+<p>We omit the proof here but it can be found on the slides and in the book.</p>
 <h2>Full Conformal Prediction Pseudocode</h2>
 <p>Below is the full conformal prediction routine in Python‐style pseudocode. It takes as input the observed training pairs <code>training_data</code>, a new feature vector <code>X_new</code>, a target miscoverage level <code>alpha</code>, a conformal <code>score_function</code>, and the label space <code>Y</code>. It outputs the prediction set <code>C</code>, consisting of all <code>y_candidate</code> whose score does not exceed the appropriate quantile of the calibration scores.</p>
 <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">full_conformal_prediction</span><span class="p">(</span><span class="n">training_data</span><span class="p">,</span> <span class="n">X_new</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">score_function</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
