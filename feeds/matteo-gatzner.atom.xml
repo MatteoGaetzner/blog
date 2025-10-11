@@ -5,7 +5,9 @@
 &lt;p&gt;We develop anytime-valid methods for uncertainty quantification in tomographic imaging, with a focus on single-photon emission tomography (SPECT). In SPECT, sequentially acquired data is used to reconstruct images representing the radioactivity distribution inside the object. In addition to producing image reconstructions, our approach constructs &lt;em&gt;confidence sequences&lt;/em&gt;: collections of confidence sets that contain the true but unknown image with high probability simultaneously across all acquisition steps. We investigate two variants: &lt;em&gt;prior likelihood mixing&lt;/em&gt; and &lt;em&gt;sequential likelihood mixing&lt;/em&gt;. Both employ likelihood-based constructions, but differ in how they use user-defined distributions. We parameterize these distributions using classical statistical estimators (MLE, MAP) as well as neural methods, namely U-Net ensembles and diffusion models. In numerical experiments, we simulate SPECT data and compare the tightness and empirical coverage rate of different confidence sequences. Empirically, sequential likelihood mixing proves to be a particularly effective method for constructing confidence sequences. The performance of this method depends on the image predictor used: U-Net ensembles often yield tight and reliable confidence sets, while in some settings classical estimators (MLE, MAP) perform best. We also present strategies for generating uncertainty visualizations. Our results suggest that combining statistical theory with neural predictors enables principled, real-time uncertainty quantification, which may support clinical decision-making in SPECT and related modalities.&lt;/p&gt;
 &lt;h2&gt;Motivation&lt;/h2&gt;
 &lt;p&gt;In single-photon emission computed tomography (SPECT), we reconstruct a radiotracer activity image from noisy photon counts collected at multiple projection angles. These measurements follow a &lt;strong&gt;Poisson process&lt;/strong&gt; determined by the imaging system, yet standard reconstruction methods—maximum-likelihood, MAP regularization, or neural networks—rarely provide &lt;em&gt;rigorous uncertainty quantification&lt;/em&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="Illustration of SPECT Measurements" src="images/composite_two_angles.svg"&gt;&lt;/p&gt;
+&lt;!-- ![Illustration of SPECT Measurements](images/composite_two_angles.svg) --&gt;
+
+&lt;p&gt;&lt;img src="images/composite_two_angles.svg" alt="Illustration of SPECT Measurements" style="display:block; width:100%; height:auto; max-width:800px; margin:1rem auto;" &gt;&lt;/p&gt;
 &lt;p&gt;&lt;em&gt;Illustration of Poisson count measurements $\mathbf{y} ∼ \mathrm{Pois}(\mathcal{R}(\theta^\ast, x))$ of image $\theta^\ast \in [0, 1]^{64 \times 64}$ at angles $x \in {0, 30}$.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;My thesis investigates how to achieve &lt;strong&gt;anytime-valid uncertainty&lt;/strong&gt; in this setting: uncertainty that remains statistically valid &lt;strong&gt;at every stage of data acquisition&lt;/strong&gt;, not just for a fixed sample size.&lt;/p&gt;
 &lt;hr&gt;
@@ -27,15 +29,30 @@ These results provide general constructions of confidence sequences directly fro
 &lt;li&gt;&lt;strong&gt;Prior Likelihood Mixing (PLM)&lt;/strong&gt; constructs level sets of a marginal likelihood ratio using a fixed prior $\mu_0$.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Sequential Likelihood Mixing (SLM)&lt;/strong&gt; generalizes this by updating the prior sequentially into a data-dependent &lt;em&gt;mixing&lt;/em&gt; distribution $\mu_t$.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Crucially, &lt;strong&gt;as long as the update rule for $\mu_t$ depends only on past data&lt;/strong&gt;—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains &lt;strong&gt;anytime-valid&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Crucially, &lt;strong&gt;as long as $\mu_t$ depends only on past data&lt;/strong&gt;—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains &lt;strong&gt;anytime-valid&lt;/strong&gt;.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;Key Findings&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Sequential Likelihood Mixing performs best.&lt;/strong&gt; SLM produced tight, reliable confidence sequences, particularly when combined with U-Net ensembles.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;PLM Approximations&lt;/strong&gt; often &lt;strong&gt;under-cover&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Distance-based uncertainty visualizations&lt;/strong&gt; provide stable, interpretable uncertainty maps that shrink consistently as data accumulate.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;figure style="max-width:800px; margin:1rem auto; text-align:center;"&gt;
+  &lt;img src="images/uncertainty_visualization_l2-maximizer.svg"
+       alt="Distance-based Uncertainty Visualization"
+       style="display:block; width:100%; height:auto; border-radius:4px;"&gt;
+  &lt;figcaption style="font-size:0.95rem; color:#666; margin-top:0.5rem;"&gt;
+    Distance-based uncertainty images across acquisition steps for S-UMix CS.
+  &lt;/figcaption&gt;
+&lt;/figure&gt;
+
+&lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;MLE/MAP baselines&lt;/strong&gt; perform well at high photon counts but are too inaccurate in low-count settings.&lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;&lt;img src="images/average_confcoefs.png"
+       alt="Average Confidence Coefficients"
+       style="display:block; width:100%; height:auto; max-width:700px; margin:1rem auto;"&gt;&lt;/p&gt;
+&lt;p&gt;In Table 4.2, lower numbers are better. They represent lower average confidence coefficients and tighter confidence sets. (Check the thesis for a detailed explanation.) The table shows that S-UMix, sequential likelihood mixing using U-Net ensembles, performs best in most settings.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2&gt;Why It Matters&lt;/h2&gt;
 &lt;p&gt;This work bridges &lt;strong&gt;finite-sample statistical guarantees&lt;/strong&gt; and &lt;strong&gt;modern neural image reconstruction&lt;/strong&gt;.
