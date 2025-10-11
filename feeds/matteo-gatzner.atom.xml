@@ -123,7 +123,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   const layout = {
     title: { text: "HMC Samples from 3D Rosenbrock Distribution" },
     autosize: true,
-    margin: {l: 0, r: 0, t: 48, b: 0},
 
     scene: {
         aspectratio: { x: 2.0, y: 2.0, z: 1.0 } 
@@ -233,7 +232,6 @@ document.addEventListener('DOMContentLoaded', async function () {
       title: { text: "Metropolis Hastings Samples from 2D Gaussian" },
       showlegend: true,
       autosize: true,              // &lt;-- key for responsiveness
-      &lt;!-- margin: { l: 10, r: 10, t: 10, b: 10 }, --&gt;
       plot_bgcolor: "rgb(250, 250, 250)",
       xaxis: {
         title: { text: "x" },
@@ -306,7 +304,6 @@ document.addEventListener('DOMContentLoaded', function () {
     title: { text: 'Metropolis Hastings: Samples from 2D Rosenbrock Distribution' },
     showlegend: true,
     autosize: true,                       // &lt;-- key for responsiveness
-    margin: { l: 60, r: 20, t: 48, b: 60 },
     plot_bgcolor: 'rgb(250,250,250)',
     xaxis: { title: { text: 'x' }, gridcolor: 'rgb(200,200,200)', zeroline: true },
     yaxis: { title: { text: 'y' }, gridcolor: 'rgb(200,200,200)', zeroline: true }
@@ -344,7 +341,6 @@ document.addEventListener("DOMContentLoaded", function() {
     title: { text: 'Gibbs Sampling: Samples from a Two-Component Distribution' },
     showlegend: true,
     autosize: true,                       // &lt;-- key for responsiveness
-    margin: { l: 60, r: 20, t: 48, b: 60 },
     plot_bgcolor: 'rgb(250,250,250)',
     xaxis: { title: { text: 'x' }, gridcolor: 'rgb(200,200,200)', zeroline: true },
     yaxis: { title: { text: 'y' }, gridcolor: 'rgb(200,200,200)', zeroline: true }
@@ -392,7 +388,6 @@ document.addEventListener('DOMContentLoaded', function () {
     title: { text: 'Metropolis Hastings: Empirical vs. Theoretical Poisson PMF' },
     showlegend: true,
     autosize: true,                       // responsive behavior
-    margin: { l: 60, r: 20, t: 48, b: 60 },
     plot_bgcolor: 'rgb(250, 250, 250)',
     xaxis: { title: { text: 'k' }, gridcolor: 'rgb(200, 200, 200)', zeroline: true },
     yaxis: { title: { text: 'Probability' }, gridcolor: 'rgb(200, 200, 200)', zeroline: true }
