@@ -32,20 +32,32 @@ ICONS = [
 BOOTSTRAP_CSS = (
     "https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css"
 )
-PYGMENTS_STYLE = "monokai"
+PYGMENTS_STYLE = "default"
 HIDE_AUTHORS = True
 
-# Math
-# PLUGIN_PATHS = ["pelican-plugins"]
-# PLUGINS = ["render_math"]
-# RENDER_MATH = False
+MARKDOWN = {
+    "extensions": [
+        "extra",
+        "toc",
+        "codehilite",
+        "pymdownx.superfences",
+        "pymdownx.highlight",
+        "pymdownx.arithmatex",
+    ],
+    "extension_configs": {
+        "codehilite": {
+            "guess_lang": False,
+            "noclasses": False,
+        },
+        "pymdownx.highlight": {
+            "linenums": False,
+            "use_pygments": True,
+        },
+        "pymdownx.arithmatex": {"generic": True},
+    },
+}
 
-# MATH_JAX = {
-#     "responsive": True,
-#     "process_summary": True,
-#     "tex_extensions": ["AMSmath.js", "AMSsymbols.js"],
-#     "MathJax_font": "sanserif",
-# }
+
 STATIC_PATHS = ["images", "files", "extras"]
 
 EXTRA_PATH_METADATA = {
@@ -59,6 +71,3 @@ EXTRA_PATH_METADATA = {
     "extras/CNAME": {"path": "CNAME"},
 }
 RFG_FAVICONS = True
-
-# Code
-PYGMENTS_STYLE = "default"

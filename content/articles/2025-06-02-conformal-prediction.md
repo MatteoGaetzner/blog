@@ -7,7 +7,7 @@ Summary: A quick introduction to the basics of conformal prediction under exchan
 
 Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book[^1] _Theoretical Foundations of Conformal Prediction_, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich.
 
-Download the slide deck here: [Download the slides](files/conformal-slides.pdf){:target="\_blank"}.
+Download the slide deck here: [Download the slides](files/conformal-slides.pdf){:target="blank"}.
 
 ## Uncertainty Quantification for Predictions
 
@@ -58,18 +58,18 @@ namely _exchangeability_.
 
 ## Exchangeability
 
-Let $Z_1, \dots Z_n \in \mathcal{Z}$ be random variables with a joint
-distribution. We say that the random vector $ (Z*1, \dots, Z_n) $ is
-\_exchangeable* if, for every permutation $\sigma \in \mathcal{S}_n,$
+Let $Z_{1}, \dots Z_{n} \in \mathcal{Z}$ be random variables with a joint
+distribution. We say that the random vector $(Z_{1}, \dots, Z_{n})$ is
+*exchangeable* if, for every permutation $\sigma \in \mathcal{S}_{n},$
 
 $$
-(Z_1, \dots, Z_n)
+(Z_{1}, \dots, Z_{n})
 \overset{d}{=}
 (Z_{\sigma(1)}, \dots, Z_{\sigma(n)})
 $$
 
 where $\overset{d}{=}$ denotes equality in distribution, and $S_n$ is the set
-of all permutations on $ [n] \coloneqq \\{1, \dots, n\\} $.
+of all permutations on $[n] \coloneqq \{1, \dots, n\}$.
 
 ## Equality in Distribution
 
@@ -192,7 +192,7 @@ Suppose $\hat{\tau}(x; z, \mathcal{D})$ estimates the $z$-th conditional quantil
 
 $$
 s\bigl((x,y);\mathcal{D}\bigr)
-\;=\; \max\\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\\}
+\;=\; \max\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\}
 $$
 
 the _CQR score_.
@@ -216,7 +216,7 @@ Whether the score function must be _symmetric_ (defined further below) in its da
 
 ### Split Conformal Prediction (no symmetry required)
 
-In split conformal, one first partitions the available data into a _training set_ $\mathcal{D}\_{\text{train}}$ and a **calibration set** $\mathcal{D}$. A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as
+In split conformal, one first partitions the available data into a _training set_ $\mathcal{D}_{\text{train}}$ and a **calibration set** $\mathcal{D}$. A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as
 
 $$
 S_i
@@ -226,15 +226,15 @@ s\Bigl((X_i,Y_i)\;;\;\mathcal{D}_{\text{train}}\Bigr)
 $$
 
 Since the model $\hat{f}$ is trained once on the training set, the only
-"dataset argument" in each score is that fixed $\mathcal{D}\_{\text{train}}$.
+"dataset argument" in each score is that fixed $\mathcal{D}_{\text{train}}$.
 In other words, each calibration score uses the same
-$\mathcal{D}\_{\text{train}},$ so there is no need for the score function to
+$\mathcal{D}_{\text{train}},$ so there is no need for the score function to
 be invariant under permuting different calibration points. **No symmetry
 condition is required** for split conformal.
 
 ### Full (Leave‐One‐Out) Conformal Prediction (symmetry required)
 
-In full conformal, for each $i \in \\{1,\dots,n\\},$ one trains a model $\hat f_{-i}$ on the data with $(X_i,Y_i)$ held out, defines
+In full conformal, for each $i \in \{1,\dots,n\},$ one trains a model $\hat f_{-i}$ on the data with $(X_i,Y_i)$ held out, defines
 
 $$
 S_i \;=\; s\Bigl((X_i,Y_i)\;;\;\mathcal{D}\setminus\{(X_i,Y_i)\}\Bigr),
@@ -256,7 +256,7 @@ $$
 s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R}
 $$
 
-is called _symmetric_ if, for any $(x,y)$ and any dataset $\mathcal{D}=\\{(x_1,y_1),\dots,(x_k,y_k)\\},$ and for every permutation $\sigma,$
+is called _symmetric_ if, for any $(x,y)$ and any dataset $\mathcal{D}=\{(x_1,y_1),\dots,(x_k,y_k)\},$ and for every permutation $\sigma,$
 
 $$
 s\bigl((x,y);\mathcal{D}\bigr)
@@ -264,7 +264,7 @@ s\bigl((x,y);\mathcal{D}\bigr)
 s\bigl((x,y);\mathcal{D}_\sigma\bigr),
 $$
 
-where $\mathcal{D}\_\sigma = \\{(x\_{\sigma(1)},y\_{\sigma(1)}),\dots,(x\_{\sigma(k)},y\_{\sigma(k)})\\}$.
+where $\mathcal{D}_\sigma = \{(x_{\sigma(1)},y_{\sigma(1)}),\dots,(x_{\sigma(k)},y_{\sigma(k)})\}$.
 
 In other words, if you permute the order of the training points in $\mathcal{D},$ the score does not change.
 
@@ -281,7 +281,7 @@ out of the way.
 To that end, denote the training set with $n$ data points as
 
 $$
-\mathcal{D}\_n
+\mathcal{D}_n
 \;=\;
 \bigl((X_1, Y_1),\,(X_2, Y_2),\,\dots,\,(X_n, Y_n)\bigr),
 $$
@@ -289,35 +289,35 @@ $$
 and the training set with the additional test point as
 
 $$
-\mathcal{D}\_{n+1}
+\mathcal{D}_{n+1}
 \;=\;
-\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X\_{n+1}, Y\_{n+1})\bigr).
+\bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1}, Y_{n+1})\bigr).
 $$
 
-Of course, in reality, $Y\_{n+1}$ is unknown, so we cannot form $\mathcal{D}\_{n+1}$ directly.
+Of course, in reality, $Y_{n+1}$ is unknown, so we cannot form $\mathcal{D}_{n+1}$ directly.
 
 To see whether a particular label $y$ "fits" with the existing data, define the
 _augmented dataset_ as
 
 $$
-\mathcal{D}\_{n+1}^y
+\mathcal{D}_{n+1}^y
 \;=\;
 \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\;(X_{n+1},\,y)\bigr).
 $$
 
 In this notation, $(X_{n+1},\,y)$ is what we call the _hypothesized test
 point_. The question becomes: if we pretend $Y_{n+1} = y,$ does the full
-dataset $\mathcal{D}\_{n+1}^y$ look "typical" under our chosen score function?
+dataset $\mathcal{D}_{n+1}^y$ look "typical" under our chosen score function?
 
-For a given $y,$ we compute a conformal score for each data point in $\mathcal{D}\_{n+1}^y,$ symbolically
+For a given $y,$ we compute a conformal score for each data point in $\mathcal{D}_{n+1}^y,$ symbolically
 
 $$
 S_i^y
 \;=\;
 \begin{cases}
-  s\bigl((X_i, Y_i);\,\mathcal{D}\_{n+1}^y\bigr),
+  s\bigl((X_i, Y_i);\,\mathcal{D}_{n+1}^y\bigr),
     & \text{for } i = 1,2,\ldots,n, \newline
-  s\bigl((X_{n+1},\,y);\,\mathcal{D}\_{n+1}^y\bigr),
+  s\bigl((X_{n+1},\,y);\,\mathcal{D}_{n+1}^y\bigr),
     & \text{for } i = n+1.
 \end{cases}
 $$
@@ -329,10 +329,10 @@ In other words:
 
 ## Full Conformal Prediction Set
 
-Given our notation, fix any candidate label $y \in \mathcal{Y}$. By inserting $\,(X_{n+1},y)$ into the original training set $\mathcal{D}\_n,$ we obtain the augmented dataset
+Given our notation, fix any candidate label $y \in \mathcal{Y}$. By inserting $\,(X_{n+1},y)$ into the original training set $\mathcal{D}_n,$ we obtain the augmented dataset
 
 $$
-\mathcal{D}\_{n+1}^y \;=\; \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1},\,y)\bigr).
+\mathcal{D}_{n+1}^y \;=\; \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1},\,y)\bigr).
 $$
 
 Next, for each $i=1,\dots,n+1,$ we compute the conformal score
@@ -341,9 +341,9 @@ $$
 S_i^y
 \;=\;
 \begin{cases}
-  s\bigl((X_i,\,Y_i);\;\mathcal{D}\_{n+1}^y\bigr),
+  s\bigl((X_i,\,Y_i);\;\mathcal{D}_{n+1}^y\bigr),
     & i = 1,2,\dots,n, \newline
-  s\bigl((X_{n+1},\,y);\;\mathcal{D}\_{n+1}^y\bigr),
+  s\bigl((X_{n+1},\,y);\;\mathcal{D}_{n+1}^y\bigr),
     & i = n+1.
 \end{cases}
 $$
@@ -361,19 +361,19 @@ we define
 $$
 \mathcal{C}(X_{n+1})
 \;=\;
-\bigl\\{\,y\in\mathcal{Y} : S\_{n+1}^y \;\le\;\hat{q}^y \bigr\\}.
+\bigl\{\,y\in\mathcal{Y} : S_{n+1}^y \;\le\;\hat{q}^y \bigr\}.
 $$
 
-In other words, $\mathcal{C}(X_{n+1})$ is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the $n$ scores from $\{(X_i,Y_i)\}\_{i=1}^n$. This construction intuitively inverts the score function: only those $y$ that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.
+In other words, $\mathcal{C}(X_{n+1})$ is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the $n$ scores from $\{(X_i,Y_i)\}_{i=1}^n$. This construction intuitively inverts the score function: only those $y$ that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.
 
 ---
 
 ## Computing $\mathcal{C}(X_{n+1})$
 
-In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y},$ forms $\mathcal{D}\_{n+1}^y,$ computes $\\{S_i^y\\}\_{i=1}^{n+1},$ finds the conformal quantile $\hat{q}^y,$ and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute
+In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y},$ forms $\mathcal{D}_{n+1}^y,$ computes $\{S_i^y\}_{i=1}^{n+1},$ finds the conformal quantile $\hat{q}^y,$ and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute
 
 $$
-\\{\,y: S_{n+1}^y \le \hat q^y\\}
+\{\,y: S_{n+1}^y \le \hat q^y\}
 $$
 
 directly.
@@ -421,19 +421,12 @@ def full_conformal_prediction(training_data, X_new, alpha, score_function, Y):
     return C
 ```
 
-Full conformal gives exact coverage by retraining on every $(X_{n+1},y),$ but this can be expensive in practice. A more computationally efficient alternative is split conformal, where you explicitly choose a training set $\mathcal{D}\_{\text{train}}$ and a separate calibration set $\mathcal{D},$ fit the model once on $\mathcal{D}\_{\text{train}},$ and use $\mathcal{D}$ only to compute the calibration scores.
+Full conformal gives exact coverage by retraining on every $(X_{n+1},y),$ but this can be expensive in practice. A more computationally efficient alternative is split conformal, where you explicitly choose a training set $\mathcal{D}_{\text{train}}$ and a separate calibration set $\mathcal{D},$ fit the model once on $\mathcal{D}_{\text{train}},$ and use $\mathcal{D}$ only to compute the calibration scores.
 
 ## Split Conformal Prediction Pseudocode
 
 ```python
-def split_conformal_prediction(
-    D_train,
-    D,
-    X_new,
-    alpha,
-    score_function,
-    Y
-):
+def split_conformal_prediction(D_train, D, X_new, alpha, score_function, Y):
     calib_scores = [
         score_function((X_i, Y_i), D_train)
         for (X_i, Y_i) in D_calib
@@ -455,7 +448,7 @@ $$
 \Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr)\;\ge\;1-\alpha,
 $$
 
-but requires only a single model fit on $\mathcal{D}\_{\text{train}}$ and straightforward calibration on $\mathcal{D}$.
+but requires only a single model fit on $\mathcal{D}_{\text{train}}$ and straightforward calibration on $\mathcal{D}$.
 
 ## Full vs. Split Conformal: Trade-Offs
 
