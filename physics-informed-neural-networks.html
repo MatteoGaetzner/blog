@@ -100,7 +100,7 @@ Formally, this can be expressed as</p>
 <p>where the error norm is defined as</p>
 <div class="arithmatex">\[
 |u_\theta - u|_p
-\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p , dy \right)^{1/p}.
+\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p \; dy \right)^{1/p}.
 \]</div>
 <p>Since the true solution <span class="arithmatex">\(u\)</span> is generally unknown, we cannot compute this loss directly.
 However, we typically know that <span class="arithmatex">\(u\)</span> satisfies a PDE of the form</p>
@@ -118,7 +118,7 @@ This allows us to define the <strong>PDE residual</strong></p>
 <p>To ensure that <span class="arithmatex">\(u_\theta\)</span> satisfies the PDE, we minimize the expected residual:</p>
 <div class="arithmatex">\[
 \mathcal{L}_{\text{PDE}}(\theta)
-\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p , dy.
+\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p \; dy.
 \]</div>
 <p>In practice, this integral is approximated by a numerical quadrature over <span class="arithmatex">\(N \in \mathbb{N}\)</span> collocation points <span class="arithmatex">\(\{y_i\}_{i=1}^N\)</span>, yielding</p>
 <div class="arithmatex">\[
@@ -188,6 +188,10 @@ we can include a <strong>data loss</strong></p>
 \hat{\theta} = \arg\min_{\theta \in \Theta} \mathcal{L}(\theta),
 \]</div>
 <p>where <span class="arithmatex">\(\hat{\theta}\)</span> denotes the parameters obtained by numerical optimization (e.g., using Adam).</p>
+<hr />
+<h2 id="acknowledgment">Acknowledgment</h2>
+<p>This post is based on material covered in the <strong>AI in the Sciences and Engineering (HS 2025)</strong> lecture by <strong>Prof. Dr. Siddhartha Mishra</strong>,
+<em>Computational and Applied Mathematics Laboratory (CamLab), Seminar for Applied Mathematics (SAM), D-MATH, ETH AI Center, and Swiss National AI Institute (SNAI), ETH Zürich, Switzerland.</em></p>
     </div>
   </article>
     </div>

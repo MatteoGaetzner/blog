@@ -20,7 +20,7 @@ Formally, this can be expressed as&lt;/p&gt;
 &lt;p&gt;where the error norm is defined as&lt;/p&gt;
 &lt;div class="arithmatex"&gt;\[
 |u_\theta - u|_p
-\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p , dy \right)^{1/p}.
+\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p \; dy \right)^{1/p}.
 \]&lt;/div&gt;
 &lt;p&gt;Since the true solution &lt;span class="arithmatex"&gt;\(u\)&lt;/span&gt; is generally unknown, we cannot compute this loss directly.
 However, we typically know that &lt;span class="arithmatex"&gt;\(u\)&lt;/span&gt; satisfies a PDE of the form&lt;/p&gt;
@@ -38,7 +38,7 @@ This allows us to define the &lt;strong&gt;PDE residual&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;To ensure that &lt;span class="arithmatex"&gt;\(u_\theta\)&lt;/span&gt; satisfies the PDE, we minimize the expected residual:&lt;/p&gt;
 &lt;div class="arithmatex"&gt;\[
 \mathcal{L}_{\text{PDE}}(\theta)
-\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p , dy.
+\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p \; dy.
 \]&lt;/div&gt;
 &lt;p&gt;In practice, this integral is approximated by a numerical quadrature over &lt;span class="arithmatex"&gt;\(N \in \mathbb{N}\)&lt;/span&gt; collocation points &lt;span class="arithmatex"&gt;\(\{y_i\}_{i=1}^N\)&lt;/span&gt;, yielding&lt;/p&gt;
 &lt;div class="arithmatex"&gt;\[
@@ -107,4 +107,8 @@ we can include a &lt;strong&gt;data loss&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="arithmatex"&gt;\[
 \hat{\theta} = \arg\min_{\theta \in \Theta} \mathcal{L}(\theta),
 \]&lt;/div&gt;
-&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\hat{\theta}\)&lt;/span&gt; denotes the parameters obtained by numerical optimization (e.g., using Adam).&lt;/p&gt;</content><category term="Machine Learning"></category><category term="neural-networks"></category><category term="physics"></category><category term="pdes"></category></entry></feed>
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\hat{\theta}\)&lt;/span&gt; denotes the parameters obtained by numerical optimization (e.g., using Adam).&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="acknowledgment"&gt;Acknowledgment&lt;/h2&gt;
+&lt;p&gt;This post is based on material covered in the &lt;strong&gt;AI in the Sciences and Engineering (HS 2025)&lt;/strong&gt; lecture by &lt;strong&gt;Prof. Dr. Siddhartha Mishra&lt;/strong&gt;,
+&lt;em&gt;Computational and Applied Mathematics Laboratory (CamLab), Seminar for Applied Mathematics (SAM), D-MATH, ETH AI Center, and Swiss National AI Institute (SNAI), ETH Zürich, Switzerland.&lt;/em&gt;&lt;/p&gt;</content><category term="Machine Learning"></category><category term="neural-networks"></category><category term="physics"></category><category term="pdes"></category></entry></feed>
