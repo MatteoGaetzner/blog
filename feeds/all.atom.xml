@@ -1,37 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>Matteo Gätzner – Blog &amp; Portfolio</title><link href="https://www.matteogaetzner.com/" rel="alternate"></link><link href="https://www.matteogaetzner.com/feeds/all.atom.xml" rel="self"></link><id>https://www.matteogaetzner.com/</id><updated>2025-10-11T00:00:00+02:00</updated><subtitle>Projects, insights &amp; thoughts</subtitle><entry><title>Anytime-Valid Neural Uncertainty Quantification for SPECT Imaging</title><link href="https://www.matteogaetzner.com/anytime-valid-neural-uncertainty-quantification-for-spect-imaging.html" rel="alternate"></link><published>2025-10-11T00:00:00+02:00</published><updated>2025-10-11T00:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-10-11:/anytime-valid-neural-uncertainty-quantification-for-spect-imaging.html</id><summary type="html">&lt;p&gt;A short overview of my MSc thesis, which adapts and applies &lt;strong&gt;Sequential and Prior Likelihood Mixing&lt;/strong&gt; (Kirschner et al., 2025) to &lt;strong&gt;anytime-valid uncertainty quantification&lt;/strong&gt; in tomographic imaging. The work explores how to obtain statistically valid uncertainty for &lt;strong&gt;SPECT reconstructions&lt;/strong&gt; using both classical estimators and modern neural predictors such as U-Net ensembles and diffusion models.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="files/thesis.pdf" target="_blank"&gt;Download the thesis (PDF)&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Abstract&lt;/h2&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Matteo Gätzner – Blog &amp; Portfolio</title><link href="https://www.matteogaetzner.com/" rel="alternate"></link><link href="https://www.matteogaetzner.com/feeds/all.atom.xml" rel="self"></link><id>https://www.matteogaetzner.com/</id><updated>2025-10-12T00:00:00+02:00</updated><subtitle>Projects, insights &amp; thoughts</subtitle><entry><title>Physics-informed Neural Networks</title><link href="https://www.matteogaetzner.com/physics-informed-neural-networks.html" rel="alternate"></link><published>2025-10-12T00:00:00+02:00</published><updated>2025-10-12T00:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-10-12:/physics-informed-neural-networks.html</id><summary type="html">&lt;p&gt;An introduction to physics-informed neural networks (PINNs), which integrate physical laws expressed as PDEs into neural network training by enforcing differential equation constraints through automatic differentiation.&lt;/p&gt;</summary><content type="html">&lt;hr /&gt;
+&lt;h2 id="summary"&gt;Summary&lt;/h2&gt;
+&lt;p&gt;Physics-informed neural networks (PINNs) are a class of deep learning models that incorporate physical laws—typically expressed as partial differential equations (PDEs)—directly into the training process. Instead of relying solely on data, PINNs leverage automatic differentiation to enforce that the neural network outputs satisfy the governing equations of the system.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="general-recipe"&gt;General Recipe&lt;/h2&gt;
+&lt;p&gt;Let
+&lt;span class="arithmatex"&gt;\(\theta \in \Theta\)&lt;/span&gt;
+denote the parameters of a neural network, and let
+&lt;span class="arithmatex"&gt;\(u_\theta : \mathcal{Y} \to \mathbb{R}^d\)&lt;/span&gt;
+be a deep neural network (DNN) that approximates the true physical field
+&lt;span class="arithmatex"&gt;\(u : \mathcal{Y} \to \mathbb{R}^d\)&lt;/span&gt;,
+which is an (unknown) solution to a PDE defined on the domain
+&lt;span class="arithmatex"&gt;\(\mathcal{Y} \subset \mathbb{R}^m\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;We aim to find parameters &lt;span class="arithmatex"&gt;\(\theta^\ast\)&lt;/span&gt; such that &lt;span class="arithmatex"&gt;\(u_\theta \approx u\)&lt;/span&gt;.
+Formally, this can be expressed as&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\theta^\ast \in \arg\min_{\theta \in \Theta} |u_\theta - u|_p,
+\]&lt;/div&gt;
+&lt;p&gt;where the error norm is defined as&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+|u_\theta - u|_p
+\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p , dy \right)^{1/p}.
+\]&lt;/div&gt;
+&lt;p&gt;Since the true solution &lt;span class="arithmatex"&gt;\(u\)&lt;/span&gt; is generally unknown, we cannot compute this loss directly.
+However, we typically know that &lt;span class="arithmatex"&gt;\(u\)&lt;/span&gt; satisfies a PDE of the form&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{D}(u(y)) = f(y), \quad y \in \mathcal{Y},
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt; is a (possibly nonlinear) differential operator, and
+&lt;span class="arithmatex"&gt;\(f : \mathcal{Y} \to \mathbb{R}^d\)&lt;/span&gt; is a known source term.&lt;/p&gt;
+&lt;p&gt;Because &lt;span class="arithmatex"&gt;\(u_\theta\)&lt;/span&gt; is differentiable with respect to its inputs, we can use automatic differentiation (AD) to compute &lt;span class="arithmatex"&gt;\(\mathcal{D}(u_\theta(y))\)&lt;/span&gt;.
+This allows us to define the &lt;strong&gt;PDE residual&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{R}_\theta(y) \coloneqq \mathcal{D}(u_\theta(y)) - f(y),
+\]&lt;/div&gt;
+&lt;p&gt;for all &lt;span class="arithmatex"&gt;\(y \in \mathcal{Y}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;To ensure that &lt;span class="arithmatex"&gt;\(u_\theta\)&lt;/span&gt; satisfies the PDE, we minimize the expected residual:&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}_{\text{PDE}}(\theta)
+\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p , dy.
+\]&lt;/div&gt;
+&lt;p&gt;In practice, this integral is approximated by a numerical quadrature over &lt;span class="arithmatex"&gt;\(N \in \mathbb{N}\)&lt;/span&gt; collocation points &lt;span class="arithmatex"&gt;\(\{y_i\}_{i=1}^N\)&lt;/span&gt;, yielding&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}_{\text{PDE}}(\theta)
+\approx \sum_{i=1}^N w_i , |\mathcal{R}_\theta(y_i)|^p,
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(w_i &amp;gt; 0\)&lt;/span&gt; are quadrature weights (commonly &lt;span class="arithmatex"&gt;\(w_i = 1/N\)&lt;/span&gt;) and typically &lt;span class="arithmatex"&gt;\(p=2\)&lt;/span&gt; (mean squared error).
+The network parameters &lt;span class="arithmatex"&gt;\(\theta\)&lt;/span&gt; are then optimized via gradient-based methods such as &lt;strong&gt;Adam&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="incorporating-data-and-boundary-conditions"&gt;Incorporating Data and Boundary Conditions&lt;/h2&gt;
+&lt;p&gt;In many physical systems, we have &lt;strong&gt;initial&lt;/strong&gt;, &lt;strong&gt;boundary&lt;/strong&gt;, or &lt;strong&gt;measurement&lt;/strong&gt; data that the solution must satisfy.
+Let:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;span class="arithmatex"&gt;\(t \geq 0\)&lt;/span&gt; denote time,&lt;/li&gt;
+&lt;li&gt;&lt;span class="arithmatex"&gt;\(x \in \mathcal{X}\)&lt;/span&gt; spatial coordinates, and&lt;/li&gt;
+&lt;li&gt;&lt;span class="arithmatex"&gt;\(y \in \mathcal{Y}\)&lt;/span&gt; represent parameters or input conditions.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Then the PINN is a function&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+u_\theta : \mathbb{R}_{\geq 0} \times \mathcal{X} \times \mathcal{Y} \to \mathbb{R}^d,
+\quad (t, x, y) \mapsto u_\theta(t, x, y).
+\]&lt;/div&gt;
+&lt;h3 id="initial-conditions"&gt;Initial Conditions&lt;/h3&gt;
+&lt;p&gt;If the true solution satisfies an initial condition&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\begin{align}
+u(0, x_1, y_1) &amp;amp;= g(x_1, y_1) \\
+&amp;amp;\vdots \\
+u(0, x_{N_{\text{IC}}}, y_{N_{\text{IC}}}) &amp;amp;= g(x_{N_{\text{IC}}}, y_{N_{\text{IC}}}) \\
+\end{align}
+\]&lt;/div&gt;
+&lt;p&gt;we can enforce this constraint by adding an &lt;strong&gt;initial loss term&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}_{\text{IC}}(\theta)
+= \frac{1}{N_{\text{IC}}} \sum_{i=1}^{N_{\text{IC}}}
+|u_\theta(0, x_i, y_i) - g(x_i, y_i)|^2.
+\]&lt;/div&gt;
+&lt;h3 id="boundary-conditions"&gt;Boundary Conditions&lt;/h3&gt;
+&lt;p&gt;Boundary conditions specify the behavior of the solution on the spatial boundary &lt;span class="arithmatex"&gt;\(\partial\mathcal{X}\)&lt;/span&gt;.
+They can be enforced by adding a loss term similar to the initial condition loss.
+For example, if the solution satisfies a boundary condition &lt;span class="arithmatex"&gt;\(u(x, y) = h(x, y)\)&lt;/span&gt; for &lt;span class="arithmatex"&gt;\((x, y) \in \partial\mathcal{X} \times \mathcal{Y}\)&lt;/span&gt;, we define&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}_{\text{BC}}(\theta)
+= \frac{1}{N_{\text{BC}}} \sum_{i=1}^{N_{\text{BC}}}
+|u_\theta(x_i, y_i) - h(x_i, y_i)|^2.
+\]&lt;/div&gt;
+&lt;h3 id="observational-data"&gt;Observational Data&lt;/h3&gt;
+&lt;p&gt;If we have observed data points &lt;span class="arithmatex"&gt;\({(t_i, x_i, y_i, u_i)}_{i=1}^{N_{\text{data}}}\)&lt;/span&gt;,
+we can include a &lt;strong&gt;data loss&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}_{\text{data}}(\theta)
+= \frac{1}{N_{\text{data}}} \sum_{i=1}^{N_{\text{data}}}
+|u_\theta(t_i, x_i, y_i) - u_i|^2.
+\]&lt;/div&gt;
+&lt;hr /&gt;
+&lt;h2 id="full-training-objective"&gt;Full Training Objective&lt;/h2&gt;
+&lt;p&gt;The total PINN loss typically combines the PDE, initial, and data losses:&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\mathcal{L}(\theta) = \lambda_{\text{PDE}} \mathcal{L}_{\text{PDE}}(\theta) + 
+\lambda_{\text{IC}} \mathcal{L}_{\text{IC}}(\theta) +
+\lambda_{\text{BC}} \mathcal{L}_{\text{BC}}(\theta) +
+\lambda_{\text{data}} \mathcal{L}_{\text{data}}(\theta),
+\]&lt;/div&gt;
+&lt;p&gt;where the weights &lt;span class="arithmatex"&gt;\(\lambda_{\text{PDE}}, \lambda_{\text{IC}}, \lambda_{\text{BC}}, \lambda_{\text{data}} &amp;gt; 0\)&lt;/span&gt; balance the contributions of each term.&lt;/p&gt;
+&lt;p&gt;The network parameters are then &lt;strong&gt;optimized&lt;/strong&gt; by minimizing the loss function:&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+\hat{\theta} = \arg\min_{\theta \in \Theta} \mathcal{L}(\theta),
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\hat{\theta}\)&lt;/span&gt; denotes the parameters obtained by numerical optimization (e.g., using Adam).&lt;/p&gt;</content><category term="Machine Learning"></category><category term="neural-networks"></category><category term="physics"></category><category term="pdes"></category></entry><entry><title>Anytime-Valid Neural Uncertainty Quantification for SPECT Imaging</title><link href="https://www.matteogaetzner.com/anytime-valid-neural-uncertainty-quantification-for-spect-imaging.html" rel="alternate"></link><published>2025-10-11T00:00:00+02:00</published><updated>2025-10-11T00:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-10-11:/anytime-valid-neural-uncertainty-quantification-for-spect-imaging.html</id><summary type="html">&lt;p&gt;A short overview of my MSc thesis, which adapts and applies &lt;strong&gt;Sequential and Prior Likelihood Mixing&lt;/strong&gt; (Kirschner et al., 2025) to &lt;strong&gt;anytime-valid uncertainty quantification&lt;/strong&gt; in tomographic imaging. The work explores how to obtain statistically valid uncertainty for &lt;strong&gt;SPECT reconstructions&lt;/strong&gt; using both classical estimators and modern neural predictors such as U-Net ensembles and diffusion models.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="files/thesis.pdf" target="_blank"&gt;Download the thesis (PDF)&lt;/a&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="abstract"&gt;Abstract&lt;/h2&gt;
 &lt;p&gt;We develop anytime-valid methods for uncertainty quantification in tomographic imaging, with a focus on single-photon emission tomography (SPECT). In SPECT, sequentially acquired data is used to reconstruct images representing the radioactivity distribution inside the object. In addition to producing image reconstructions, our approach constructs &lt;em&gt;confidence sequences&lt;/em&gt;: collections of confidence sets that contain the true but unknown image with high probability simultaneously across all acquisition steps. We investigate two variants: &lt;em&gt;prior likelihood mixing&lt;/em&gt; and &lt;em&gt;sequential likelihood mixing&lt;/em&gt;. Both employ likelihood-based constructions, but differ in how they use user-defined distributions. We parameterize these distributions using classical statistical estimators (MLE, MAP) as well as neural methods, namely U-Net ensembles and diffusion models. In numerical experiments, we simulate SPECT data and compare the tightness and empirical coverage rate of different confidence sequences. Empirically, sequential likelihood mixing proves to be a particularly effective method for constructing confidence sequences. The performance of this method depends on the image predictor used: U-Net ensembles often yield tight and reliable confidence sets, while in some settings classical estimators (MLE, MAP) perform best. We also present strategies for generating uncertainty visualizations. Our results suggest that combining statistical theory with neural predictors enables principled, real-time uncertainty quantification, which may support clinical decision-making in SPECT and related modalities.&lt;/p&gt;
-&lt;h2&gt;Motivation&lt;/h2&gt;
+&lt;h2 id="motivation"&gt;Motivation&lt;/h2&gt;
 &lt;p&gt;In single-photon emission computed tomography (SPECT), we reconstruct a radiotracer activity image from noisy photon counts collected at multiple projection angles. These measurements follow a &lt;strong&gt;Poisson process&lt;/strong&gt; determined by the imaging system, yet standard reconstruction methods—maximum-likelihood, MAP regularization, or neural networks—rarely provide &lt;em&gt;rigorous uncertainty quantification&lt;/em&gt;.&lt;/p&gt;
 &lt;!-- ![Illustration of SPECT Measurements](images/composite_two_angles.svg) --&gt;
 
 &lt;p&gt;&lt;img src="images/composite_two_angles.svg" alt="Illustration of SPECT Measurements" style="display:block; width:100%; height:auto; max-width:800px; margin:1rem auto;" &gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;Illustration of Poisson count measurements $\mathbf{y} ∼ \mathrm{Pois}(\mathcal{R}(\theta^\ast, x))$ of image $\theta^\ast \in [0, 1]^{64 \times 64}$ at angles $x \in {0, 30}$.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Illustration of Poisson count measurements &lt;span class="arithmatex"&gt;\(\mathbf{y} ∼ \mathrm{Pois}(\mathcal{R}(\theta^\ast, x))\)&lt;/span&gt; of image &lt;span class="arithmatex"&gt;\(\theta^\ast \in [0, 1]^{64 \times 64}\)&lt;/span&gt; at angles &lt;span class="arithmatex"&gt;\(x \in \{0, 30\}\)&lt;/span&gt;.&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;My thesis investigates how to achieve &lt;strong&gt;anytime-valid uncertainty&lt;/strong&gt; in this setting: uncertainty that remains statistically valid &lt;strong&gt;at every stage of data acquisition&lt;/strong&gt;, not just for a fixed sample size.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Confidence Sequences&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="confidence-sequences"&gt;Confidence Sequences&lt;/h2&gt;
 &lt;p&gt;The central theoretical tool is a &lt;strong&gt;confidence sequence (CS)&lt;/strong&gt;, a time-indexed family of sets&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 S_1, S_2, \dots \subseteq \Theta
 \quad\text{such that}\quad
 \Pr(\forall t:\ \theta^\ast \in S_t) \ge 1 - \alpha.
-$$&lt;/p&gt;
-&lt;p&gt;In the above, $\theta^\ast \in \Theta$ is a unknown parameter living in a known space $\Theta$ and $\alpha \in (0, 1)$ is a user-specified error level.&lt;/p&gt;
-&lt;p&gt;Unlike classical confidence intervals, a CS retains its coverage property &lt;strong&gt;across all time steps&lt;/strong&gt;, that is, for $\theta^\ast$ is inside &lt;strong&gt;all&lt;/strong&gt; $S_t$ with a (high) probability of at least $1-\alpha$.
+\]&lt;/div&gt;
+&lt;p&gt;In the above, &lt;span class="arithmatex"&gt;\(\theta^\ast \in \Theta\)&lt;/span&gt; is a unknown parameter living in a known space &lt;span class="arithmatex"&gt;\(\Theta\)&lt;/span&gt; and &lt;span class="arithmatex"&gt;\(\alpha \in (0, 1)\)&lt;/span&gt; is a user-specified error level.&lt;/p&gt;
+&lt;p&gt;Unlike classical confidence intervals, a CS retains its coverage property &lt;strong&gt;across all time steps&lt;/strong&gt;, that is, for &lt;span class="arithmatex"&gt;\(\theta^\ast\)&lt;/span&gt; is inside &lt;strong&gt;all&lt;/strong&gt; &lt;span class="arithmatex"&gt;\(S_t\)&lt;/span&gt; with a (high) probability of at least &lt;span class="arithmatex"&gt;\(1-\alpha\)&lt;/span&gt;.
 We do not have to worry about multiple-testing. This allows us to continuously monitor uncertainty and decide to stop data collection when a confidence set becomes sufficiently tight.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Theoretical Foundation: Likelihood Mixing&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="theoretical-foundation-likelihood-mixing"&gt;Theoretical Foundation: Likelihood Mixing&lt;/h2&gt;
 &lt;p&gt;The thesis builds on the &lt;strong&gt;Sequential Likelihood Mixing (SLM)&lt;/strong&gt; and &lt;strong&gt;Prior Likelihood Mixing (PLM)&lt;/strong&gt; theorems developed by &lt;strong&gt;Kirschner, Krause, Meziu, and Mojmir (2025)&lt;/strong&gt;.
 These results provide general constructions of confidence sequences directly from likelihoods.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Prior Likelihood Mixing (PLM)&lt;/strong&gt; constructs level sets of a marginal likelihood ratio using a fixed prior $\mu_0$.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Sequential Likelihood Mixing (SLM)&lt;/strong&gt; generalizes this by updating the prior sequentially into a data-dependent &lt;em&gt;mixing&lt;/em&gt; distribution $\mu_t$.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Prior Likelihood Mixing (PLM)&lt;/strong&gt; constructs level sets of a marginal likelihood ratio using a fixed prior &lt;span class="arithmatex"&gt;\(\mu_0\)&lt;/span&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sequential Likelihood Mixing (SLM)&lt;/strong&gt; generalizes this by updating the prior sequentially into a data-dependent &lt;em&gt;mixing&lt;/em&gt; distribution &lt;span class="arithmatex"&gt;\(\mu_t\)&lt;/span&gt;.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Crucially, &lt;strong&gt;as long as $\mu_t$ depends only on past data&lt;/strong&gt;—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains &lt;strong&gt;anytime-valid&lt;/strong&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Key Findings&lt;/h2&gt;
+&lt;p&gt;Crucially, &lt;strong&gt;as long as &lt;span class="arithmatex"&gt;\(\mu_t\)&lt;/span&gt; depends only on past data&lt;/strong&gt;—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains &lt;strong&gt;anytime-valid&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="key-findings"&gt;Key Findings&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Sequential Likelihood Mixing performs best.&lt;/strong&gt; SLM produced tight, reliable confidence sequences, particularly when combined with U-Net ensembles.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;PLM Approximations&lt;/strong&gt; often &lt;strong&gt;under-cover&lt;/strong&gt;.&lt;/li&gt;
@@ -53,8 +161,8 @@ These results provide general constructions of confidence sequences directly fro
        alt="Average Confidence Coefficients"
        style="display:block; width:100%; height:auto; max-width:700px; margin:1rem auto;"&gt;&lt;/p&gt;
 &lt;p&gt;In Table 4.2, lower numbers are better. They represent lower average confidence coefficients and tighter confidence sets. (Check the thesis for a detailed explanation.) The table shows that S-UMix, sequential likelihood mixing using U-Net ensembles, performs best in most settings.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Why It Matters&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="why-it-matters"&gt;Why It Matters&lt;/h2&gt;
 &lt;p&gt;This work bridges &lt;strong&gt;finite-sample statistical guarantees&lt;/strong&gt; and &lt;strong&gt;modern neural image reconstruction&lt;/strong&gt;.
 It shows that the likelihood-mixing constructions of Kirschner et al. (2025), can be used to:&lt;/p&gt;
 &lt;ul&gt;
@@ -63,12 +171,12 @@ It shows that the likelihood-mixing constructions of Kirschner et al. (2025), ca
 &lt;li&gt;enable &lt;strong&gt;principled stopping criteria&lt;/strong&gt; based on uncertainty reduction.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;In short, the thesis demonstrates that &lt;strong&gt;anytime-valid neural uncertainty quantification&lt;/strong&gt; is feasible for SPECT imaging by pairing theoretically grounded confidence sequences with data-driven approximations.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Resources&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="resources"&gt;Resources&lt;/h2&gt;
 &lt;p&gt;&lt;a href="files/thesis.pdf" target="_blank"&gt;Download the thesis (PDF)&lt;/a&gt; &lt;/br&gt;
 Code release (coming soon): &lt;a href="https://github.com/MatteoGaetzner/anytime-nuq"&gt;MatteoGaetzner/anytime-nuq&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;This post summarizes my MSc Statistics thesis, supervised by &lt;strong&gt;Prof. Dr. Jonas Peters&lt;/strong&gt; and co-advised by &lt;strong&gt;Dr. Johannes Kirschner&lt;/strong&gt;, conducted within the Swiss Data Science Center (SDSC).&lt;/p&gt;</content><category term="Statistics"></category><category term="uncertainty-quantification"></category><category term="tomography"></category><category term="SPECT"></category><category term="confidence-sequences"></category><category term="neural-networks"></category><category term="diffusion-models"></category></entry><entry><title>mini-mcmc — a lightweight Rust library for MCMC</title><link href="https://www.matteogaetzner.com/mini-mcmc-a-lightweight-rust-library-for-mcmc.html" rel="alternate"></link><published>2025-10-11T00:00:00+02:00</published><updated>2025-10-11T00:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-10-11:/mini-mcmc-a-lightweight-rust-library-for-mcmc.html</id><summary type="html">&lt;p&gt;This post introduces mini-mcmc, a compact Rust library for running modern MCMC algorithms—like NUTS, HMC, Metropolis–Hastings, and Gibbs—with automatic differentiation, parallel chains, and optional GPU acceleration.&lt;/p&gt;</summary><content type="html">&lt;hr&gt;
+&lt;hr /&gt;
+&lt;p&gt;This post summarizes my MSc Statistics thesis, supervised by &lt;strong&gt;Prof. Dr. Jonas Peters&lt;/strong&gt; and co-advised by &lt;strong&gt;Dr. Johannes Kirschner&lt;/strong&gt;, conducted within the Swiss Data Science Center (SDSC).&lt;/p&gt;</content><category term="Statistics"></category><category term="uncertainty-quantification"></category><category term="tomography"></category><category term="SPECT"></category><category term="confidence-sequences"></category><category term="neural-networks"></category><category term="diffusion-models"></category></entry><entry><title>mini-mcmc — a lightweight Rust library for MCMC</title><link href="https://www.matteogaetzner.com/mini-mcmc-a-lightweight-rust-library-for-mcmc.html" rel="alternate"></link><published>2025-10-11T00:00:00+02:00</published><updated>2025-10-11T00:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-10-11:/mini-mcmc-a-lightweight-rust-library-for-mcmc.html</id><summary type="html">&lt;p&gt;This post introduces mini-mcmc, a compact Rust library for running modern MCMC algorithms—like NUTS, HMC, Metropolis–Hastings, and Gibbs—with automatic differentiation, parallel chains, and optional GPU acceleration.&lt;/p&gt;</summary><content type="html">&lt;hr /&gt;
 &lt;!-- Load Plotly once per page --&gt;
 &lt;script src="https://cdn.plot.ly/plotly-2.12.1.min.js"&gt;&lt;/script&gt;
 
@@ -160,7 +268,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 &lt;/script&gt;
 
-&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;h2 id="overview"&gt;Overview&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://github.com/MatteoGaetzner/mini-mcmc"&gt;&lt;code&gt;mini-mcmc&lt;/code&gt;&lt;/a&gt; is a Rust library for &lt;strong&gt;Markov Chain Monte Carlo&lt;/strong&gt; providing
 &lt;strong&gt;NUTS&lt;/strong&gt;, &lt;strong&gt;HMC&lt;/strong&gt;, &lt;strong&gt;Metropolis–Hastings&lt;/strong&gt;, and &lt;strong&gt;Gibbs&lt;/strong&gt; samplers in a single, consistent framework.&lt;/p&gt;
 &lt;p&gt;It’s designed to be:&lt;/p&gt;
@@ -171,19 +279,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 &lt;li&gt;&lt;strong&gt;Deterministic&lt;/strong&gt; – explicit seeds and reproducible chains&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Built on &lt;a href="https://burn.dev"&gt;&lt;code&gt;burn&lt;/code&gt;&lt;/a&gt;, it supports &lt;strong&gt;autodiff&lt;/strong&gt;, &lt;strong&gt;parallel chains&lt;/strong&gt;, and optional &lt;strong&gt;GPU acceleration&lt;/strong&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="installation"&gt;Installation&lt;/h2&gt;
 &lt;p&gt;Add it to your Rust project:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;cargo&lt;span class="w"&gt; &lt;/span&gt;add&lt;span class="w"&gt; &lt;/span&gt;mini-mcmc
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 &lt;p&gt;Then import it:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;use&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;mini_mcmc&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 &lt;p&gt;Full examples are in the &lt;a href="https://github.com/MatteoGaetzner/mini-mcmc"&gt;GitHub repo →&lt;/a&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Core idea&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="core-idea"&gt;Core idea&lt;/h2&gt;
 &lt;p&gt;Define your &lt;strong&gt;log density&lt;/strong&gt;, choose a &lt;strong&gt;MCMC method&lt;/strong&gt;, and run.
 For gradient-based methods (HMC, NUTS), &lt;strong&gt;autodiff&lt;/strong&gt; computes gradients automatically — no need to derive them by hand.&lt;/p&gt;
 &lt;p&gt;Each sampler provides:&lt;/p&gt;
@@ -192,8 +298,8 @@ For gradient-based methods (HMC, NUTS), &lt;strong&gt;autodiff&lt;/strong&gt; co
 &lt;li&gt;Diagnostics (acceptance rate, R-hat, ESS)&lt;/li&gt;
 &lt;li&gt;Optional live progress display&lt;/li&gt;
 &lt;/ul&gt;
-&lt;hr&gt;
-&lt;h2&gt;Quick example — 2D Gaussian via Metropolis–Hastings&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="quick-example-2d-gaussian-via-metropolishastings"&gt;Quick example — 2D Gaussian via Metropolis–Hastings&lt;/h2&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;use&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;mini_mcmc&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;core&lt;/span&gt;&lt;span class="p"&gt;::{&lt;/span&gt;&lt;span class="n"&gt;init_det&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;ChainRunner&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
 &lt;span class="k"&gt;use&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;mini_mcmc&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;distributions&lt;/span&gt;&lt;span class="p"&gt;::{&lt;/span&gt;&lt;span class="n"&gt;Gaussian2D&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;IsotropicGaussian&lt;/span&gt;&lt;span class="p"&gt;};&lt;/span&gt;
 &lt;span class="k"&gt;use&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;mini_mcmc&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;metropolis_hastings&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;MetropolisHastings&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
@@ -217,7 +323,6 @@ For gradient-based methods (HMC, NUTS), &lt;strong&gt;autodiff&lt;/strong&gt; co
 &lt;span class="w"&gt;    &lt;/span&gt;&lt;span class="fm"&gt;assert_eq!&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sample&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;shape&lt;/span&gt;&lt;span class="p"&gt;()[&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 &lt;div class="plot-wrap"&gt;
   &lt;div id="2d-gaussian" class="plot-box"&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -276,17 +381,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 &lt;/script&gt;
 
-&lt;hr&gt;
-&lt;h2&gt;Gradient-based samplers&lt;/h2&gt;
-&lt;p&gt;For HMC and NUTS, you only need to specify $\log p(\theta)$ —
-autodiff (via &lt;a href="https://burn.dev"&gt;&lt;code&gt;burn&lt;/code&gt;&lt;/a&gt;) handles $\nabla_\theta \log p(\theta)$.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="gradient-based-samplers"&gt;Gradient-based samplers&lt;/h2&gt;
+&lt;p&gt;For HMC and NUTS, you only need to specify &lt;span class="arithmatex"&gt;\(\log p(\theta)\)&lt;/span&gt; —
+autodiff (via &lt;a href="https://burn.dev"&gt;&lt;code&gt;burn&lt;/code&gt;&lt;/a&gt;) handles &lt;span class="arithmatex"&gt;\(\nabla_\theta \log p(\theta)\)&lt;/span&gt;.&lt;/p&gt;
 &lt;p&gt;Switch between CPU and GPU with one line:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;type&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nc"&gt;Backend&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="n"&gt;burn&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;Autodiff&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;burn&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;backend&lt;/span&gt;&lt;span class="p"&gt;::&lt;/span&gt;&lt;span class="n"&gt;NdArray&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;span class="c1"&gt;// or: burn::backend::Autodiff&amp;lt;burn::backend::Wgpu&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;hr&gt;
-&lt;h2&gt;Plots with Generated Samples&lt;/h2&gt;
+&lt;hr /&gt;
+&lt;h2 id="plots-with-generated-samples"&gt;Plots with Generated Samples&lt;/h2&gt;
 &lt;div class="plot-wrap"&gt;
   &lt;div id="mh-2d-rosenbrock" class="plot-box"&gt;&lt;/div&gt;
 &lt;/div&gt;
@@ -421,25 +525,25 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 &lt;/script&gt;</content><category term="Statistics"></category><category term="rust"></category><category term="mcmc"></category><category term="bayesian-inference"></category><category term="nuts"></category><category term="hmc"></category></entry><entry><title>Conformal Prediction Under Exchangeability</title><link href="https://www.matteogaetzner.com/conformal-prediction-under-exchangeability.html" rel="alternate"></link><published>2025-06-02T12:00:00+02:00</published><updated>2025-06-02T12:00:00+02:00</updated><author><name>Matteo Gätzner</name></author><id>tag:www.matteogaetzner.com,2025-06-02:/conformal-prediction-under-exchangeability.html</id><summary type="html">&lt;p&gt;A quick introduction to the basics of conformal prediction under exchangeability.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Hey all! As the title suggests, this blog post is a short introduction to conformal prediction under exchangeability. It is based on Chapter 3 of the book&lt;sup id="fnref:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; &lt;em&gt;Theoretical Foundations of Conformal Prediction&lt;/em&gt;, which Anna Kosovskaya, Sarah Medding, and I presented at the Conformal and Probabilistic Prediction Seminar, led by Prof. Dr. Johanna Ziegel, at ETH Zurich.&lt;/p&gt;
-&lt;p&gt;Download the slide deck here: &lt;a href="files/conformal-slides.pdf" target="_blank"&gt;Download the slides&lt;/a&gt;.&lt;/p&gt;
-&lt;h2&gt;Uncertainty Quantification for Predictions&lt;/h2&gt;
-&lt;p&gt;Say you have data points $(X_i, Y_i) \in \mathcal{X} \times \mathcal{Y}$. For a
-regression task, that could mean $(X_i, Y_i) \in \mathbb{R}^d \times
-\mathbb{R}$. A common task is to then predict unknown label $Y_{n+1}$ given known
-input $X_{n+1}$ using some predictive model $\hat{f}(X_{n+1})$ that could for
+&lt;p&gt;Download the slide deck here: &lt;a href="files/conformal-slides.pdf" target="blank"&gt;Download the slides&lt;/a&gt;.&lt;/p&gt;
+&lt;h2 id="uncertainty-quantification-for-predictions"&gt;Uncertainty Quantification for Predictions&lt;/h2&gt;
+&lt;p&gt;Say you have data points &lt;span class="arithmatex"&gt;\((X_i, Y_i) \in \mathcal{X} \times \mathcal{Y}\)&lt;/span&gt;. For a
+regression task, that could mean &lt;span class="arithmatex"&gt;\((X_i, Y_i) \in \mathbb{R}^d \times
+\mathbb{R}\)&lt;/span&gt;. A common task is to then predict unknown label &lt;span class="arithmatex"&gt;\(Y_{n+1}\)&lt;/span&gt; given known
+input &lt;span class="arithmatex"&gt;\(X_{n+1}\)&lt;/span&gt; using some predictive model &lt;span class="arithmatex"&gt;\(\hat{f}(X_{n+1})\)&lt;/span&gt; that could for
 example be a neural network, linear model or a smoothing spline.&lt;/p&gt;
 &lt;p&gt;Now, even if the model's performance seems good empirically — say it has a low
-cross-validated $R^2$ score — we have no real guarantee that inference time
+cross-validated &lt;span class="arithmatex"&gt;\(R^2\)&lt;/span&gt; score — we have no real guarantee that inference time
 predictions are accurate.&lt;/p&gt;
 &lt;p&gt;The solution that conformal prediction proposes is to construct a &lt;em&gt;prediction
-set&lt;/em&gt; $\, \mathcal{C}(X_{n+1}) \subseteq \mathcal{Y}$ based on $\hat{f}$ and get
-guarantees for $\mathcal{C}(X_{n+1}).$ The guarantee is called &lt;em&gt;marginal coverage&lt;/em&gt;
-and says that the prediction set contains the true label $Y_{n+1}$ with high
+set&lt;/em&gt; &lt;span class="arithmatex"&gt;\(\, \mathcal{C}(X_{n+1}) \subseteq \mathcal{Y}\)&lt;/span&gt; based on &lt;span class="arithmatex"&gt;\(\hat{f}\)&lt;/span&gt; and get
+guarantees for &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1}).\)&lt;/span&gt; The guarantee is called &lt;em&gt;marginal coverage&lt;/em&gt;
+and says that the prediction set contains the true label &lt;span class="arithmatex"&gt;\(Y_{n+1}\)&lt;/span&gt; with high
 probability, symbolically&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \Pr(Y_{n+1} \in \mathcal{C}(X_{n+1})) \geq 1 - \alpha
-$$&lt;/p&gt;
-&lt;p&gt;where $\alpha \in (0, 1)$ is a user-specified error level that shrinks or
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\alpha \in (0, 1)\)&lt;/span&gt; is a user-specified error level that shrinks or
 expands the prediction set accordingly. A large prediction set implies high
 uncertainty while a small one implies low uncertainty.&lt;/p&gt;
 &lt;p&gt;Of course, there are other solutions for quantifying predictive uncertainty,
@@ -457,188 +561,188 @@ prediction sets. Weak models tend to produce large, uninformative ones.&lt;/p&gt
 with finite datasets, finite model sizes and finite time.&lt;/p&gt;
 &lt;p&gt;We do need a minimal assumption on the data-generating distribution though,
 namely &lt;em&gt;exchangeability&lt;/em&gt;.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Exchangeability&lt;/h2&gt;
-&lt;p&gt;Let $Z_1, \dots Z_n \in \mathcal{Z}$ be random variables with a joint
-distribution. We say that the random vector $ (Z&lt;em&gt;1, \dots, Z_n) $ is
-_exchangeable&lt;/em&gt; if, for every permutation $\sigma \in \mathcal{S}_n,$&lt;/p&gt;
-&lt;p&gt;$$
-(Z_1, \dots, Z_n)
+&lt;hr /&gt;
+&lt;h2 id="exchangeability"&gt;Exchangeability&lt;/h2&gt;
+&lt;p&gt;Let &lt;span class="arithmatex"&gt;\(Z_{1}, \dots Z_{n} \in \mathcal{Z}\)&lt;/span&gt; be random variables with a joint
+distribution. We say that the random vector &lt;span class="arithmatex"&gt;\((Z_{1}, \dots, Z_{n})\)&lt;/span&gt; is
+&lt;em&gt;exchangeable&lt;/em&gt; if, for every permutation &lt;span class="arithmatex"&gt;\(\sigma \in \mathcal{S}_{n},\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+(Z_{1}, \dots, Z_{n})
 \overset{d}{=}
 (Z_{\sigma(1)}, \dots, Z_{\sigma(n)})
-$$&lt;/p&gt;
-&lt;p&gt;where $\overset{d}{=}$ denotes equality in distribution, and $S_n$ is the set
-of all permutations on $ [n] \coloneqq \{1, \dots, n\} $.&lt;/p&gt;
-&lt;h2&gt;Equality in Distribution&lt;/h2&gt;
-&lt;p&gt;Recall that two real‐valued random variables $Z_1$ and $Z_2$ are &lt;em&gt;equal in distribution&lt;/em&gt;, written&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\overset{d}{=}\)&lt;/span&gt; denotes equality in distribution, and &lt;span class="arithmatex"&gt;\(S_n\)&lt;/span&gt; is the set
+of all permutations on &lt;span class="arithmatex"&gt;\([n] \coloneqq \{1, \dots, n\}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h2 id="equality-in-distribution"&gt;Equality in Distribution&lt;/h2&gt;
+&lt;p&gt;Recall that two real‐valued random variables &lt;span class="arithmatex"&gt;\(Z_1\)&lt;/span&gt; and &lt;span class="arithmatex"&gt;\(Z_2\)&lt;/span&gt; are &lt;em&gt;equal in distribution&lt;/em&gt;, written&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 Z_1 \;\overset{d}{=}\; Z_2,
-$$&lt;/p&gt;
-&lt;p&gt;if for every $z\in\mathbb{R},$&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;if for every &lt;span class="arithmatex"&gt;\(z\in\mathbb{R},\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \Pr\bigl(Z_1 \le z\bigr)
 \;=\;
 \Pr\bigl(Z_2 \le z\bigr).
-$$&lt;/p&gt;
-&lt;p&gt;Equivalently, for every (Borel) set $A\subseteq\mathbb{R},$&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;Equivalently, for every (Borel) set &lt;span class="arithmatex"&gt;\(A\subseteq\mathbb{R},\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \Pr\bigl(Z_1\in A\bigr)
 \;=\;
 \Pr\bigl(Z_2\in A\bigr).
-$$&lt;/p&gt;
-&lt;p&gt;In the context of exchangeability, we require that any finite tuple $(Z_1,\dots,Z_n)$ has the same joint law as its arbitrarily permuted version $(Z_{\sigma(1)},\dots,Z_{\sigma(n)})$.&lt;/p&gt;
-&lt;h2&gt;Exchangeability for Infinite Sequences&lt;/h2&gt;
-&lt;p&gt;An infinite sequence $Z_1,Z_2,Z_3,\dots$ taking values in the same space $\mathcal{Z}$ is called &lt;em&gt;exchangeable&lt;/em&gt; if every finite truncation $(Z_1,\dots,Z_n)$ is exchangeable in the sense above. In particular, for every $n$ and every permutation $\sigma$ of ${1,\dots,n},$&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;In the context of exchangeability, we require that any finite tuple &lt;span class="arithmatex"&gt;\((Z_1,\dots,Z_n)\)&lt;/span&gt; has the same joint law as its arbitrarily permuted version &lt;span class="arithmatex"&gt;\((Z_{\sigma(1)},\dots,Z_{\sigma(n)})\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h2 id="exchangeability-for-infinite-sequences"&gt;Exchangeability for Infinite Sequences&lt;/h2&gt;
+&lt;p&gt;An infinite sequence &lt;span class="arithmatex"&gt;\(Z_1,Z_2,Z_3,\dots\)&lt;/span&gt; taking values in the same space &lt;span class="arithmatex"&gt;\(\mathcal{Z}\)&lt;/span&gt; is called &lt;em&gt;exchangeable&lt;/em&gt; if every finite truncation &lt;span class="arithmatex"&gt;\((Z_1,\dots,Z_n)\)&lt;/span&gt; is exchangeable in the sense above. In particular, for every &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; and every permutation &lt;span class="arithmatex"&gt;\(\sigma\)&lt;/span&gt; of &lt;span class="arithmatex"&gt;\(\{1,\dots,n\},\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 (Z_1,\dots,Z_n)
 \;\overset{d}{=}\;
 (Z_{\sigma(1)},\dots,Z_{\sigma(n)}).
-$$&lt;/p&gt;
-&lt;p&gt;This simply ensures that no matter how many observations one looks at—$n=1,2,3,\dots$—their joint distribution does not change when you reorder them.&lt;/p&gt;
-&lt;h2&gt;Exchangeability Intuition&lt;/h2&gt;
+\]&lt;/div&gt;
+&lt;p&gt;This simply ensures that no matter how many observations one looks at—&lt;span class="arithmatex"&gt;\(n=1,2,3,\dots\)&lt;/span&gt;—their joint distribution does not change when you reorder them.&lt;/p&gt;
+&lt;h2 id="exchangeability-intuition"&gt;Exchangeability Intuition&lt;/h2&gt;
 &lt;p&gt;Informally put, an exchangeable sequence "doesn’t care" about the order in which data arrive. Any permutation of the observations is equally likely. Here are two common scenarios in which exchangeability holds.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Scenario 1 (i.i.d. data):&lt;/strong&gt;
-If $Z_1,\dots,Z_n$ are i.i.d. draws from some distribution $P,$ then obviously&lt;/p&gt;
-&lt;p&gt;$$
+If &lt;span class="arithmatex"&gt;\(Z_1,\dots,Z_n\)&lt;/span&gt; are i.i.d. draws from some distribution &lt;span class="arithmatex"&gt;\(P,\)&lt;/span&gt; then obviously&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \Pr(Z_1=z_1,\dots,Z_n=z_n)
 \;=\;
 \prod_{i=1}^n P(Z_i=z_i)
 \;=\;
 \Pr(Z_{\sigma(1)}=z_1,\dots,Z_{\sigma(n)}=z_n)
-$$&lt;/p&gt;
-&lt;p&gt;for any permutation $\sigma$. Hence i.i.d. implies exchangeable.&lt;/p&gt;
+\]&lt;/div&gt;
+&lt;p&gt;for any permutation &lt;span class="arithmatex"&gt;\(\sigma\)&lt;/span&gt;. Hence i.i.d. implies exchangeable.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Scenario 2 (sampling without replacement):&lt;/strong&gt;
-Suppose you draw $n$ items from a finite population ${z_1,\dots,z_N}$ uniformly &lt;em&gt;without replacement&lt;/em&gt;. Then each ordered‐tuple of $n$ distinct draws is equally likely, so any reordering of those $n$ draws has the same probability. Thus the sequence is exchangeable (though not independent).&lt;/p&gt;
-&lt;h2&gt;Setting&lt;/h2&gt;
-&lt;p&gt;Let's summarize our assumptions and goal. We'll assume an exchangeable dataset of size $n+1$:&lt;/p&gt;
-&lt;p&gt;$$
+Suppose you draw &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; items from a finite population &lt;span class="arithmatex"&gt;\(\{z_1,\dots,z_N\}\)&lt;/span&gt; uniformly &lt;em&gt;without replacement&lt;/em&gt;. Then each ordered‐tuple of &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; distinct draws is equally likely, so any reordering of those &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; draws has the same probability. Thus the sequence is exchangeable (though not independent).&lt;/p&gt;
+&lt;h2 id="setting"&gt;Setting&lt;/h2&gt;
+&lt;p&gt;Let's summarize our assumptions and goal. We'll assume an exchangeable dataset of size &lt;span class="arithmatex"&gt;\(n+1\)&lt;/span&gt;:&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 (X_1,Y_1),\,(X_2,Y_2),\,\dots,\,\bigl(X_n,Y_n\bigr),\,\bigl(X_{n+1},Y_{n+1}\bigr)
 \;\in\;
 \mathcal{X}\times\mathcal{Y},
-$$&lt;/p&gt;
-&lt;p&gt;all drawn from some (possibly unknown) joint distribution on $\mathcal{X}\times\mathcal{Y}$. Our goal is to predict $Y_{n+1}$ given $X_{n+1}$ and the first $n$ pairs. In order to do that with guarantees will construct a prediction set&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;all drawn from some (possibly unknown) joint distribution on &lt;span class="arithmatex"&gt;\(\mathcal{X}\times\mathcal{Y}\)&lt;/span&gt;. Our goal is to predict &lt;span class="arithmatex"&gt;\(Y_{n+1}\)&lt;/span&gt; given &lt;span class="arithmatex"&gt;\(X_{n+1}\)&lt;/span&gt; and the first &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; pairs. In order to do that with guarantees will construct a prediction set&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \mathcal{C}\bigl(X_{n+1}\bigr)\;\subseteq\;\mathcal{Y}
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;that satisfies marginal coverage:&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \Pr\Bigl(Y_{n+1}\in \mathcal{C}(X_{n+1})\Bigr) \ge 1-\alpha,
-$$&lt;/p&gt;
-&lt;p&gt;for a user‐specified $\alpha\in(0,1)$.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Score Functions&lt;/h2&gt;
+\]&lt;/div&gt;
+&lt;p&gt;for a user‐specified &lt;span class="arithmatex"&gt;\(\alpha\in(0,1)\)&lt;/span&gt;.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="score-functions"&gt;Score Functions&lt;/h2&gt;
 &lt;p&gt;There are two flavours of conformal predicion, split conformal prediction and
 full conformal prediction. We'll define those procedures properly later and
 focus on a key ingredient in both for now.
 This key ingredient is a &lt;strong&gt;score function&lt;/strong&gt;. Formally, a score function is any mapping&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R},
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;where:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;The first argument $(x,y)$ is the &lt;em&gt;test point&lt;/em&gt;.&lt;/li&gt;
-&lt;li&gt;The second argument $\mathcal{D} = {(x_1,y_1),\dots,(x_k,y_k)}$ is any
-  dataset (of size $k$) that you use to train your predictive model.&lt;/li&gt;
+&lt;li&gt;The first argument &lt;span class="arithmatex"&gt;\((x,y)\)&lt;/span&gt; is the &lt;em&gt;test point&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;The second argument &lt;span class="arithmatex"&gt;\(\mathcal{D} = \{(x_1,y_1),\dots,(x_k,y_k)\}\)&lt;/span&gt; is any
+  dataset (of size &lt;span class="arithmatex"&gt;\(k\)&lt;/span&gt;) that you use to train your predictive model.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Intuitively, $s\bigl((x,y);\mathcal{D}\bigr)$ measures how "badly" a model trained on $\mathcal{D}$ would predict $y$ at $x$. Larger scores indicate larger error.&lt;/p&gt;
-&lt;h3&gt;Example Score Functions&lt;/h3&gt;
+&lt;p&gt;Intuitively, &lt;span class="arithmatex"&gt;\(s\bigl((x,y);\mathcal{D}\bigr)\)&lt;/span&gt; measures how "badly" a model trained on &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt; would predict &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; at &lt;span class="arithmatex"&gt;\(x\)&lt;/span&gt;. Larger scores indicate larger error.&lt;/p&gt;
+&lt;h3 id="example-score-functions"&gt;Example Score Functions&lt;/h3&gt;
 &lt;p&gt;&lt;strong&gt;Residual score (regression):&lt;/strong&gt;
-If $\hat{f}(\cdot, \mathcal{D})$ is a regression model (neural net, linear regressor, etc.) trained on $\mathcal{D},$ then&lt;/p&gt;
-&lt;p&gt;$$
+If &lt;span class="arithmatex"&gt;\(\hat{f}(\cdot, \mathcal{D})\)&lt;/span&gt; is a regression model (neural net, linear regressor, etc.) trained on &lt;span class="arithmatex"&gt;\(\mathcal{D},\)&lt;/span&gt; then&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
 \bigl|\,y - \hat f(x; \mathcal{D})\bigr|.
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;This is nonnegative and smaller when the prediction is good.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Conformal quantile regression (CQR) score (regression):&lt;/strong&gt;
-Suppose $\hat{\tau}(x; z, \mathcal{D})$ estimates the $z$-th conditional quantile of $Y$ given $X = x$. One way to obtain $\hat{\tau}$ is to use a quantile regression method. We call&lt;/p&gt;
-&lt;p&gt;$$
+Suppose &lt;span class="arithmatex"&gt;\(\hat{\tau}(x; z, \mathcal{D})\)&lt;/span&gt; estimates the &lt;span class="arithmatex"&gt;\(z\)&lt;/span&gt;-th conditional quantile of &lt;span class="arithmatex"&gt;\(Y\)&lt;/span&gt; given &lt;span class="arithmatex"&gt;\(X = x\)&lt;/span&gt;. One way to obtain &lt;span class="arithmatex"&gt;\(\hat{\tau}\)&lt;/span&gt; is to use a quantile regression method. We call&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 s\bigl((x,y);\mathcal{D}\bigr)
 \;=\; \max\{\hat{\tau}(x; \alpha / 2, \mathcal{D}) - y, y - \hat{\tau}(x; 1 - \alpha / 2, \mathcal{D})\}
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;the &lt;em&gt;CQR score&lt;/em&gt;.
-This score function is nonnegative, and adapts to the conditional distribution of $Y,$ producing smaller scores when $y$ lies near the estimated quantile and larger scores otherwise. This produces tighter prediction intervals where the model is more accurate and wider ones where it is less so. Because of its adaptability it is often considered a state-of-the-art score function for regression tasks.&lt;/p&gt;
+This score function is nonnegative, and adapts to the conditional distribution of &lt;span class="arithmatex"&gt;\(Y,\)&lt;/span&gt; producing smaller scores when &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; lies near the estimated quantile and larger scores otherwise. This produces tighter prediction intervals where the model is more accurate and wider ones where it is less so. Because of its adaptability it is often considered a state-of-the-art score function for regression tasks.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Misclassification error (classification):&lt;/strong&gt;
-If $\hat f(x; \mathcal{D})$ produces a predicted class label $\hat y,$ then&lt;/p&gt;
-&lt;p&gt;$$
+If &lt;span class="arithmatex"&gt;\(\hat f(x; \mathcal{D})\)&lt;/span&gt; produces a predicted class label &lt;span class="arithmatex"&gt;\(\hat y,\)&lt;/span&gt; then&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
 \begin{cases}
 0, &amp;amp;\text{if }\hat f(x; \mathcal{D}) = y, \newline
 1, &amp;amp;\text{otherwise.}
 \end{cases}
-$$&lt;/p&gt;
-&lt;h2&gt;Symmetry and When It’s Needed&lt;/h2&gt;
+\]&lt;/div&gt;
+&lt;h2 id="symmetry-and-when-its-needed"&gt;Symmetry and When It’s Needed&lt;/h2&gt;
 &lt;p&gt;Whether the score function must be &lt;em&gt;symmetric&lt;/em&gt; (defined further below) in its dataset argument depends on which conformal flavor you use.&lt;/p&gt;
-&lt;h3&gt;Split Conformal Prediction (no symmetry required)&lt;/h3&gt;
-&lt;p&gt;In split conformal, one first partitions the available data into a &lt;em&gt;training set&lt;/em&gt; $\mathcal{D}_{\text{train}}$ and a &lt;strong&gt;calibration set&lt;/strong&gt; $\mathcal{D}$. A single model $\hat f$ is fitted on the fixed training set, and then calibration scores are computed as&lt;/p&gt;
-&lt;p&gt;$$
+&lt;h3 id="split-conformal-prediction-no-symmetry-required"&gt;Split Conformal Prediction (no symmetry required)&lt;/h3&gt;
+&lt;p&gt;In split conformal, one first partitions the available data into a &lt;em&gt;training set&lt;/em&gt; &lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}}\)&lt;/span&gt; and a &lt;strong&gt;calibration set&lt;/strong&gt; &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt;. A single model &lt;span class="arithmatex"&gt;\(\hat f\)&lt;/span&gt; is fitted on the fixed training set, and then calibration scores are computed as&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 S_i
 \;=\;
 s\Bigl((X_i,Y_i)\;;\;\mathcal{D}_{\text{train}}\Bigr)
 \quad\text{for each index }i.
-$$&lt;/p&gt;
-&lt;p&gt;Since the model $\hat{f}$ is trained once on the training set, the only
-"dataset argument" in each score is that fixed $\mathcal{D}_{\text{train}}$.
+\]&lt;/div&gt;
+&lt;p&gt;Since the model &lt;span class="arithmatex"&gt;\(\hat{f}\)&lt;/span&gt; is trained once on the training set, the only
+"dataset argument" in each score is that fixed &lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}}\)&lt;/span&gt;.
 In other words, each calibration score uses the same
-$\mathcal{D}_{\text{train}},$ so there is no need for the score function to
+&lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}},\)&lt;/span&gt; so there is no need for the score function to
 be invariant under permuting different calibration points. &lt;strong&gt;No symmetry
 condition is required&lt;/strong&gt; for split conformal.&lt;/p&gt;
-&lt;h3&gt;Full (Leave‐One‐Out) Conformal Prediction (symmetry required)&lt;/h3&gt;
-&lt;p&gt;In full conformal, for each $i \in \{1,\dots,n\},$ one trains a model $\hat f_{-i}$ on the data with $(X_i,Y_i)$ held out, defines&lt;/p&gt;
-&lt;p&gt;$$
-S_i \;=\; s\Bigl((X_i,Y_i)\;;\;\mathcal{D}\setminus{(X_i,Y_i)}\Bigr),
-$$&lt;/p&gt;
-&lt;p&gt;and then also scores the test point $(X_{n+1},y)$ via&lt;/p&gt;
-&lt;p&gt;$$
+&lt;h3 id="full-leaveoneout-conformal-prediction-symmetry-required"&gt;Full (Leave‐One‐Out) Conformal Prediction (symmetry required)&lt;/h3&gt;
+&lt;p&gt;In full conformal, for each &lt;span class="arithmatex"&gt;\(i \in \{1,\dots,n\},\)&lt;/span&gt; one trains a model &lt;span class="arithmatex"&gt;\(\hat f_{-i}\)&lt;/span&gt; on the data with &lt;span class="arithmatex"&gt;\((X_i,Y_i)\)&lt;/span&gt; held out, defines&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
+S_i \;=\; s\Bigl((X_i,Y_i)\;;\;\mathcal{D}\setminus\{(X_i,Y_i)\}\Bigr),
+\]&lt;/div&gt;
+&lt;p&gt;and then also scores the test point &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt; via&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 S_{n+1}
 \;=\;
 s\Bigl((X_{n+1},y)\;;\;\mathcal{D}\Bigr).
-$$&lt;/p&gt;
-&lt;p&gt;Here $\mathcal{D} = {(X_1,Y_1),\dots,(X_n,Y_n)}$. Because each held‐out model $\hat f_{-i}$ depends on the dataset $\mathcal{D}\setminus{(X_i,Y_i)},$ we need the score function to be &lt;em&gt;symmetric&lt;/em&gt; in its second argument. Concretely,&lt;/p&gt;
+\]&lt;/div&gt;
+&lt;p&gt;Here &lt;span class="arithmatex"&gt;\(\mathcal{D} = \{(X_1,Y_1),\dots,(X_n,Y_n)\}\)&lt;/span&gt;. Because each held‐out model &lt;span class="arithmatex"&gt;\(\hat f_{-i}\)&lt;/span&gt; depends on the dataset &lt;span class="arithmatex"&gt;\(\mathcal{D}\setminus\{(X_i,Y_i)\},\)&lt;/span&gt; we need the score function to be &lt;em&gt;symmetric&lt;/em&gt; in its second argument. Concretely,&lt;/p&gt;
 &lt;p&gt;A score function&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 s:\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)\;\times\;\bigl(\mathcal{X}\times\mathcal{Y}\bigr)^k\;\longrightarrow\;\mathbb{R}
-$$&lt;/p&gt;
-&lt;p&gt;is called &lt;em&gt;symmetric&lt;/em&gt; if, for any $(x,y)$ and any dataset $\mathcal{D}=\{(x_1,y_1),\dots,(x_k,y_k)\},$ and for every permutation $\sigma,$&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;is called &lt;em&gt;symmetric&lt;/em&gt; if, for any &lt;span class="arithmatex"&gt;\((x,y)\)&lt;/span&gt; and any dataset &lt;span class="arithmatex"&gt;\(\mathcal{D}=\{(x_1,y_1),\dots,(x_k,y_k)\},\)&lt;/span&gt; and for every permutation &lt;span class="arithmatex"&gt;\(\sigma,\)&lt;/span&gt;&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 s\bigl((x,y);\mathcal{D}\bigr)
 \;=\;
 s\bigl((x,y);\mathcal{D}_\sigma\bigr),
-$$&lt;/p&gt;
-&lt;p&gt;where $\mathcal{D}_\sigma = \{(x_{\sigma(1)},y_{\sigma(1)}),\dots,(x_{\sigma(k)},y_{\sigma(k)})\}$.&lt;/p&gt;
-&lt;p&gt;In other words, if you permute the order of the training points in $\mathcal{D},$ the score does not change.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;The Full Conformal Prediction Procedure&lt;/h2&gt;
-&lt;p&gt;In full conformal prediction, we “invert” a chosen score function to determine which candidate labels $y$ are consistent with our data. In other words, for each possible $y\in\mathcal{Y},$ we check whether inserting $(X_{n+1},y)$ into our dataset yields a conformity score that is not unreasonably large compared to the other scores.&lt;/p&gt;
-&lt;h3&gt;Notation&lt;/h3&gt;
+\]&lt;/div&gt;
+&lt;p&gt;where &lt;span class="arithmatex"&gt;\(\mathcal{D}_\sigma = \{(x_{\sigma(1)},y_{\sigma(1)}),\dots,(x_{\sigma(k)},y_{\sigma(k)})\}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;In other words, if you permute the order of the training points in &lt;span class="arithmatex"&gt;\(\mathcal{D},\)&lt;/span&gt; the score does not change.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="the-full-conformal-prediction-procedure"&gt;The Full Conformal Prediction Procedure&lt;/h2&gt;
+&lt;p&gt;In full conformal prediction, we “invert” a chosen score function to determine which candidate labels &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; are consistent with our data. In other words, for each possible &lt;span class="arithmatex"&gt;\(y\in\mathcal{Y},\)&lt;/span&gt; we check whether inserting &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt; into our dataset yields a conformity score that is not unreasonably large compared to the other scores.&lt;/p&gt;
+&lt;h3 id="notation"&gt;Notation&lt;/h3&gt;
 &lt;p&gt;To make precise statements further below we'll first need to get some notation
 out of the way.
-To that end, denote the training set with $n$ data points as&lt;/p&gt;
-&lt;p&gt;$$
+To that end, denote the training set with &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; data points as&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \mathcal{D}_n
 \;=\;
 \bigl((X_1, Y_1),\,(X_2, Y_2),\,\dots,\,(X_n, Y_n)\bigr),
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;and the training set with the additional test point as&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \mathcal{D}_{n+1}
 \;=\;
 \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1}, Y_{n+1})\bigr).
-$$&lt;/p&gt;
-&lt;p&gt;Of course, in reality, $Y_{n+1}$ is unknown, so we cannot form $\mathcal{D}_{n+1}$ directly.&lt;/p&gt;
-&lt;p&gt;To see whether a particular label $y$ "fits" with the existing data, define the
+\]&lt;/div&gt;
+&lt;p&gt;Of course, in reality, &lt;span class="arithmatex"&gt;\(Y_{n+1}\)&lt;/span&gt; is unknown, so we cannot form &lt;span class="arithmatex"&gt;\(\mathcal{D}_{n+1}\)&lt;/span&gt; directly.&lt;/p&gt;
+&lt;p&gt;To see whether a particular label &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; "fits" with the existing data, define the
 &lt;em&gt;augmented dataset&lt;/em&gt; as&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \mathcal{D}_{n+1}^y
 \;=\;
 \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\;(X_{n+1},\,y)\bigr).
-$$&lt;/p&gt;
-&lt;p&gt;In this notation, $(X_{n+1},\,y)$ is what we call the &lt;em&gt;hypothesized test
-point&lt;/em&gt;. The question becomes: if we pretend $Y_{n+1} = y,$ does the full
-dataset $\mathcal{D}_{n+1}^y$ look "typical" under our chosen score function?&lt;/p&gt;
-&lt;p&gt;For a given $y,$ we compute a conformal score for each data point in $\mathcal{D}_{n+1}^y,$ symbolically&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;In this notation, &lt;span class="arithmatex"&gt;\((X_{n+1},\,y)\)&lt;/span&gt; is what we call the &lt;em&gt;hypothesized test
+point&lt;/em&gt;. The question becomes: if we pretend &lt;span class="arithmatex"&gt;\(Y_{n+1} = y,\)&lt;/span&gt; does the full
+dataset &lt;span class="arithmatex"&gt;\(\mathcal{D}_{n+1}^y\)&lt;/span&gt; look "typical" under our chosen score function?&lt;/p&gt;
+&lt;p&gt;For a given &lt;span class="arithmatex"&gt;\(y,\)&lt;/span&gt; we compute a conformal score for each data point in &lt;span class="arithmatex"&gt;\(\mathcal{D}_{n+1}^y,\)&lt;/span&gt; symbolically&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 S_i^y
 \;=\;
 \begin{cases}
@@ -647,19 +751,19 @@ S_i^y
   s\bigl((X_{n+1},\,y);\,\mathcal{D}_{n+1}^y\bigr),
     &amp;amp; \text{for } i = n+1.
 \end{cases}
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;In other words:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;For $i\le n,$ we score the existing pair $(X_i,Y_i)$ against the entire augmented set.&lt;/li&gt;
-&lt;li&gt;For $i=n+1,$ we score the hypothesized test point $(X_{n+1},y)$ in the same way.&lt;/li&gt;
+&lt;li&gt;For &lt;span class="arithmatex"&gt;\(i\le n,\)&lt;/span&gt; we score the existing pair &lt;span class="arithmatex"&gt;\((X_i,Y_i)\)&lt;/span&gt; against the entire augmented set.&lt;/li&gt;
+&lt;li&gt;For &lt;span class="arithmatex"&gt;\(i=n+1,\)&lt;/span&gt; we score the hypothesized test point &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt; in the same way.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Full Conformal Prediction Set&lt;/h2&gt;
-&lt;p&gt;Given our notation, fix any candidate label $y \in \mathcal{Y}$. By inserting $\,(X_{n+1},y)$ into the original training set $\mathcal{D}_n,$ we obtain the augmented dataset&lt;/p&gt;
-&lt;p&gt;$$
+&lt;h2 id="full-conformal-prediction-set"&gt;Full Conformal Prediction Set&lt;/h2&gt;
+&lt;p&gt;Given our notation, fix any candidate label &lt;span class="arithmatex"&gt;\(y \in \mathcal{Y}\)&lt;/span&gt;. By inserting &lt;span class="arithmatex"&gt;\(\,(X_{n+1},y)\)&lt;/span&gt; into the original training set &lt;span class="arithmatex"&gt;\(\mathcal{D}_n,\)&lt;/span&gt; we obtain the augmented dataset&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \mathcal{D}_{n+1}^y \;=\; \bigl((X_1, Y_1),\,\dots,\,(X_n, Y_n),\,(X_{n+1},\,y)\bigr).
-$$&lt;/p&gt;
-&lt;p&gt;Next, for each $i=1,\dots,n+1,$ we compute the conformal score&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;Next, for each &lt;span class="arithmatex"&gt;\(i=1,\dots,n+1,\)&lt;/span&gt; we compute the conformal score&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 S_i^y
 \;=\;
 \begin{cases}
@@ -668,39 +772,39 @@ S_i^y
   s\bigl((X_{n+1},\,y);\;\mathcal{D}_{n+1}^y\bigr),
     &amp;amp; i = n+1.
 \end{cases}
-$$&lt;/p&gt;
-&lt;p&gt;That is, each existing data point $(X_i,Y_i)$ is scored against the entire augmented set, and the hypothesized test point $(X_{n+1},y)$ receives its own score in exactly the same manner. If $S_{n+1}^y$ ends up being large relative to ${S_1^y,\dots,S_n^y},$ then $y$ does not conform well to the data and should be excluded from the prediction set. Conversely, when $S_{n+1}^y$ is among the smallest $\lceil(n+1)(1-\alpha)\rceil$ values of the combined list ${S_1^y,\dots,S_{n+1}^y},$ we deem $y$ sufficiently consistent and include it in our full conformal prediction set. Formally, letting&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;That is, each existing data point &lt;span class="arithmatex"&gt;\((X_i,Y_i)\)&lt;/span&gt; is scored against the entire augmented set, and the hypothesized test point &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt; receives its own score in exactly the same manner. If &lt;span class="arithmatex"&gt;\(S_{n+1}^y\)&lt;/span&gt; ends up being large relative to &lt;span class="arithmatex"&gt;\(\{S_1^y,\dots,S_n^y\},\)&lt;/span&gt; then &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; does not conform well to the data and should be excluded from the prediction set. Conversely, when &lt;span class="arithmatex"&gt;\(S_{n+1}^y\)&lt;/span&gt; is among the smallest &lt;span class="arithmatex"&gt;\(\lceil(n+1)(1-\alpha)\rceil\)&lt;/span&gt; values of the combined list &lt;span class="arithmatex"&gt;\(\{S_1^y,\dots,S_{n+1}^y\},\)&lt;/span&gt; we deem &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; sufficiently consistent and include it in our full conformal prediction set. Formally, letting&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \hat{q}^y
 \;=\;
 \text{Quantile}\bigl(S_1^y,\,S_2^y,\,\dots,\,S_n^y;\;(1-\alpha)(1 + 1/n)\bigr),
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;we define&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \mathcal{C}(X_{n+1})
 \;=\;
 \bigl\{\,y\in\mathcal{Y} : S_{n+1}^y \;\le\;\hat{q}^y \bigr\}.
-$$&lt;/p&gt;
-&lt;p&gt;In other words, $\mathcal{C}(X_{n+1})$ is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the $n$ scores from ${(X_i,Y_i)}_{i=1}^n$. This construction intuitively inverts the score function: only those $y$ that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2&gt;Computing $\mathcal{C}(X_{n+1})$&lt;/h2&gt;
-&lt;p&gt;In practice, the way one actually computes $\mathcal{C}(X_{n+1})$ depends on whether $\mathcal{Y}$ is discrete or continuous. When $\mathcal{Y}$ is a finite set (for example, in multiclass classification), one simply iterates through each label $y\in\mathcal{Y},$ forms $\mathcal{D}_{n+1}^y,$ computes $\{S_i^y\}_{i=1}^{n+1},$ finds the conformal quantile $\hat{q}^y,$ and includes $y$ precisely when $S_{n+1}^y \le \hat{q}^y$. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many $y$. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;In other words, &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\)&lt;/span&gt; is exactly the set of hypothesized labels whose conformal score does not exceed the appropriate quantile of the &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; scores from &lt;span class="arithmatex"&gt;\(\{(X_i,Y_i)\}_{i=1}^n\)&lt;/span&gt;. This construction intuitively inverts the score function: only those &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; that are not "unreasonably large" compared to how well the existing points conform are allowed into the prediction set.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;h2 id="computing-mathcalcx_n1"&gt;Computing &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\)&lt;/span&gt;&lt;/h2&gt;
+&lt;p&gt;In practice, the way one actually computes &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\)&lt;/span&gt; depends on whether &lt;span class="arithmatex"&gt;\(\mathcal{Y}\)&lt;/span&gt; is discrete or continuous. When &lt;span class="arithmatex"&gt;\(\mathcal{Y}\)&lt;/span&gt; is a finite set (for example, in multiclass classification), one simply iterates through each label &lt;span class="arithmatex"&gt;\(y\in\mathcal{Y},\)&lt;/span&gt; forms &lt;span class="arithmatex"&gt;\(\mathcal{D}_{n+1}^y,\)&lt;/span&gt; computes &lt;span class="arithmatex"&gt;\(\{S_i^y\}_{i=1}^{n+1},\)&lt;/span&gt; finds the conformal quantile &lt;span class="arithmatex"&gt;\(\hat{q}^y,\)&lt;/span&gt; and includes &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; precisely when &lt;span class="arithmatex"&gt;\(S_{n+1}^y \le \hat{q}^y\)&lt;/span&gt;. In the continuous‐label case (e.g. regression), we cannot loop over uncountably many &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt;. Instead, various strategies are used. For certain models—such as linear regression or LASSO—one can exploit analytic properties and compute&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \{\,y: S_{n+1}^y \le \hat q^y\}
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;directly.
-A more brute‐force but generally applicable approach is to discretize the original label space $\mathcal{Y}$ and work with the newly constructed discrete label space. Section 9.2 of the book provides further details on this.&lt;/p&gt;
-&lt;h2&gt;Marginal Coverage for Full Conformal Prediction&lt;/h2&gt;
+A more brute‐force but generally applicable approach is to discretize the original label space &lt;span class="arithmatex"&gt;\(\mathcal{Y}\)&lt;/span&gt; and work with the newly constructed discrete label space. Section 9.2 of the book provides further details on this.&lt;/p&gt;
+&lt;h2 id="marginal-coverage-for-full-conformal-prediction"&gt;Marginal Coverage for Full Conformal Prediction&lt;/h2&gt;
 &lt;p&gt;Under the following two conditions—first, that&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 (X_1,Y_1),\,\dots,\,(X_{n+1},Y_{n+1})
-$$&lt;/p&gt;
-&lt;p&gt;is exchangeable, and second, that the score function $s$ is symmetric in its dataset argument—the full conformal set $\mathcal{C}(X_{n+1})$ satisfies the marginal coverage guarantee&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;is exchangeable, and second, that the score function &lt;span class="arithmatex"&gt;\(s\)&lt;/span&gt; is symmetric in its dataset argument—the full conformal set &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\)&lt;/span&gt; satisfies the marginal coverage guarantee&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr) \ge 1-\alpha.
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;We omit the proof here but it can be found on the slides and in the book.&lt;/p&gt;
-&lt;h2&gt;Full Conformal Prediction Pseudocode&lt;/h2&gt;
+&lt;h2 id="full-conformal-prediction-pseudocode"&gt;Full Conformal Prediction Pseudocode&lt;/h2&gt;
 &lt;p&gt;Below is the full conformal prediction routine in Python‐style pseudocode. It takes as input the observed training pairs &lt;code&gt;training_data&lt;/code&gt;, a new feature vector &lt;code&gt;X_new&lt;/code&gt;, a target miscoverage level &lt;code&gt;alpha&lt;/code&gt;, a conformal &lt;code&gt;score_function&lt;/code&gt;, and the label space &lt;code&gt;Y&lt;/code&gt;. It outputs the prediction set &lt;code&gt;C&lt;/code&gt;, consisting of all &lt;code&gt;y_candidate&lt;/code&gt; whose score does not exceed the appropriate quantile of the calibration scores.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;full_conformal_prediction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;training_data&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;X_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_function&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;C&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nb"&gt;set&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
@@ -722,17 +826,9 @@ $$&lt;/p&gt;
 
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;C&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Full conformal gives exact coverage by retraining on every $(X_{n+1},y),$ but this can be expensive in practice. A more computationally efficient alternative is split conformal, where you explicitly choose a training set $\mathcal{D}_{\text{train}}$ and a separate calibration set $\mathcal{D},$ fit the model once on $\mathcal{D}_{\text{train}},$ and use $\mathcal{D}$ only to compute the calibration scores.&lt;/p&gt;
-&lt;h2&gt;Split Conformal Prediction Pseudocode&lt;/h2&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;split_conformal_prediction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;
-    &lt;span class="n"&gt;D_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="n"&gt;X_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="n"&gt;score_function&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="n"&gt;Y&lt;/span&gt;
-&lt;span class="p"&gt;):&lt;/span&gt;
+&lt;p&gt;Full conformal gives exact coverage by retraining on every &lt;span class="arithmatex"&gt;\((X_{n+1},y),\)&lt;/span&gt; but this can be expensive in practice. A more computationally efficient alternative is split conformal, where you explicitly choose a training set &lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}}\)&lt;/span&gt; and a separate calibration set &lt;span class="arithmatex"&gt;\(\mathcal{D},\)&lt;/span&gt; fit the model once on &lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}},\)&lt;/span&gt; and use &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt; only to compute the calibration scores.&lt;/p&gt;
+&lt;h2 id="split-conformal-prediction-pseudocode"&gt;Split Conformal Prediction Pseudocode&lt;/h2&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="k"&gt;def&lt;/span&gt; &lt;span class="nf"&gt;split_conformal_prediction&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;D_train&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;D&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;X_new&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;alpha&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;score_function&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y&lt;/span&gt;&lt;span class="p"&gt;):&lt;/span&gt;
     &lt;span class="n"&gt;calib_scores&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
         &lt;span class="n"&gt;score_function&lt;/span&gt;&lt;span class="p"&gt;((&lt;/span&gt;&lt;span class="n"&gt;X_i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y_i&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;D_train&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
         &lt;span class="k"&gt;for&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;X_i&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;Y_i&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="ow"&gt;in&lt;/span&gt; &lt;span class="n"&gt;D_calib&lt;/span&gt;
@@ -747,26 +843,25 @@ $$&lt;/p&gt;
 
     &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;C&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 &lt;p&gt;Under exchangeability, this split conformal procedure still guarantees&lt;/p&gt;
-&lt;p&gt;$$
+&lt;div class="arithmatex"&gt;\[
 \Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr)\;\ge\;1-\alpha,
-$$&lt;/p&gt;
-&lt;p&gt;but requires only a single model fit on $\mathcal{D}_{\text{train}}$ and straightforward calibration on $\mathcal{D}$.&lt;/p&gt;
-&lt;h2&gt;Full vs. Split Conformal: Trade-Offs&lt;/h2&gt;
-&lt;p&gt;As we have seen, full conformal prediction uses every available data point both to train the model and to compute calibration scores. In practice, this means that for each candidate label $y,$ one must retrain $\hat f$ on the augmented dataset that includes $(X_{n+1},y)$. Because the score function $s\bigl((x,y);\mathcal{D}\bigr)$ is evaluated anew for each hypothetical $(X_{n+1},y),$ full conformal requires a symmetric score function and incurs a large computational cost whenever $\mathcal{Y}$ is large or continuous.&lt;/p&gt;
-&lt;p&gt;By contrast, split conformal divides the data into two disjoint subsets—one for fitting the model and one for calibration. After training $\hat f$ on the first portion, calibration scores are computed only once on the held-out subset, and the same quantile threshold is used to test all $y\in\mathcal{Y}$. Because no retraining is needed when evaluating different labels, split conformal greatly reduces computational effort and works with any (pretrained) score function $s$.&lt;/p&gt;
-&lt;p&gt;From a statistical perspective, however, full conformal enjoys an advantage: it leverages all $n$ observations both to fit $\hat f$ and to calibrate, yielding typically tighter prediction sets $\mathcal{C}(X_{n+1})$. Split conformal, which trains on only part of the data, often produces larger sets because less information is available during model fitting. In other words, split conformal is &lt;strong&gt;computationally&lt;/strong&gt; more efficient (one model fit versus many), while full conformal is &lt;strong&gt;statistically&lt;/strong&gt; more efficient (using all data for both training and calibration).&lt;/p&gt;
-&lt;h2&gt;Summary&lt;/h2&gt;
-&lt;p&gt;In this post, we introduced conformal prediction under the sole assumption of exchangeability. We began by motivating the need for reliable uncertainty quantification—showing that even a high cross‐validated $R^2$ offers no formal guarantee at inference time. Conformal prediction remedies this by constructing a prediction set $\mathcal{C}(X_{n+1})\subseteq\mathcal{Y}$ that enjoys finite‐sample marginal coverage:&lt;/p&gt;
-&lt;p&gt;$$
+\]&lt;/div&gt;
+&lt;p&gt;but requires only a single model fit on &lt;span class="arithmatex"&gt;\(\mathcal{D}_{\text{train}}\)&lt;/span&gt; and straightforward calibration on &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt;.&lt;/p&gt;
+&lt;h2 id="full-vs-split-conformal-trade-offs"&gt;Full vs. Split Conformal: Trade-Offs&lt;/h2&gt;
+&lt;p&gt;As we have seen, full conformal prediction uses every available data point both to train the model and to compute calibration scores. In practice, this means that for each candidate label &lt;span class="arithmatex"&gt;\(y,\)&lt;/span&gt; one must retrain &lt;span class="arithmatex"&gt;\(\hat f\)&lt;/span&gt; on the augmented dataset that includes &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt;. Because the score function &lt;span class="arithmatex"&gt;\(s\bigl((x,y);\mathcal{D}\bigr)\)&lt;/span&gt; is evaluated anew for each hypothetical &lt;span class="arithmatex"&gt;\((X_{n+1},y),\)&lt;/span&gt; full conformal requires a symmetric score function and incurs a large computational cost whenever &lt;span class="arithmatex"&gt;\(\mathcal{Y}\)&lt;/span&gt; is large or continuous.&lt;/p&gt;
+&lt;p&gt;By contrast, split conformal divides the data into two disjoint subsets—one for fitting the model and one for calibration. After training &lt;span class="arithmatex"&gt;\(\hat f\)&lt;/span&gt; on the first portion, calibration scores are computed only once on the held-out subset, and the same quantile threshold is used to test all &lt;span class="arithmatex"&gt;\(y\in\mathcal{Y}\)&lt;/span&gt;. Because no retraining is needed when evaluating different labels, split conformal greatly reduces computational effort and works with any (pretrained) score function &lt;span class="arithmatex"&gt;\(s\)&lt;/span&gt;.&lt;/p&gt;
+&lt;p&gt;From a statistical perspective, however, full conformal enjoys an advantage: it leverages all &lt;span class="arithmatex"&gt;\(n\)&lt;/span&gt; observations both to fit &lt;span class="arithmatex"&gt;\(\hat f\)&lt;/span&gt; and to calibrate, yielding typically tighter prediction sets &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\)&lt;/span&gt;. Split conformal, which trains on only part of the data, often produces larger sets because less information is available during model fitting. In other words, split conformal is &lt;strong&gt;computationally&lt;/strong&gt; more efficient (one model fit versus many), while full conformal is &lt;strong&gt;statistically&lt;/strong&gt; more efficient (using all data for both training and calibration).&lt;/p&gt;
+&lt;h2 id="summary"&gt;Summary&lt;/h2&gt;
+&lt;p&gt;In this post, we introduced conformal prediction under the sole assumption of exchangeability. We began by motivating the need for reliable uncertainty quantification—showing that even a high cross‐validated &lt;span class="arithmatex"&gt;\(R^2\)&lt;/span&gt; offers no formal guarantee at inference time. Conformal prediction remedies this by constructing a prediction set &lt;span class="arithmatex"&gt;\(\mathcal{C}(X_{n+1})\subseteq\mathcal{Y}\)&lt;/span&gt; that enjoys finite‐sample marginal coverage:&lt;/p&gt;
+&lt;div class="arithmatex"&gt;\[
 \Pr\bigl(Y_{n+1}\in\mathcal{C}(X_{n+1})\bigr)\;\ge\;1-\alpha,
-$$&lt;/p&gt;
+\]&lt;/div&gt;
 &lt;p&gt;without any distributional or model‐specific assumptions beyond exchangeability. We defined exchangeability (finite and infinite sequences) and saw intuitive examples—i.i.d. draws and sampling without replacement—where the joint law remains invariant under permutation.&lt;/p&gt;
-&lt;p&gt;We then introduced the central notion of a conformal score $s\bigl((x,y);\mathcal{D}\bigr),$ which measures how "nonconforming" a hypothetical label $y$ is at feature $x$ given dataset $\mathcal{D}$. Common choices include the absolute residual and the quantile‐based CQR score. In split conformal prediction, a single model is trained on half the data, calibration scores are computed on the other half, and the quantile of those scores determines the prediction set—requiring only one model fit. In full conformal prediction, we "invert" the score by hypothetically appending $(X_{n+1},y)$ to the entire dataset for each $y\in\mathcal{Y},$ computing all $n+1$ scores, and including those $y$ whose score is no larger than the appropriate quantile. Python‐style pseudocode was provided for both full and split conformal, with split conformal being computationally lighter yet still guaranteeing marginal coverage under exchangeability.&lt;/p&gt;
+&lt;p&gt;We then introduced the central notion of a conformal score &lt;span class="arithmatex"&gt;\(s\bigl((x,y);\mathcal{D}\bigr),\)&lt;/span&gt; which measures how "nonconforming" a hypothetical label &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; is at feature &lt;span class="arithmatex"&gt;\(x\)&lt;/span&gt; given dataset &lt;span class="arithmatex"&gt;\(\mathcal{D}\)&lt;/span&gt;. Common choices include the absolute residual and the quantile‐based CQR score. In split conformal prediction, a single model is trained on half the data, calibration scores are computed on the other half, and the quantile of those scores determines the prediction set—requiring only one model fit. In full conformal prediction, we "invert" the score by hypothetically appending &lt;span class="arithmatex"&gt;\((X_{n+1},y)\)&lt;/span&gt; to the entire dataset for each &lt;span class="arithmatex"&gt;\(y\in\mathcal{Y},\)&lt;/span&gt; computing all &lt;span class="arithmatex"&gt;\(n+1\)&lt;/span&gt; scores, and including those &lt;span class="arithmatex"&gt;\(y\)&lt;/span&gt; whose score is no larger than the appropriate quantile. Python‐style pseudocode was provided for both full and split conformal, with split conformal being computationally lighter yet still guaranteeing marginal coverage under exchangeability.&lt;/p&gt;
 &lt;p&gt;While this post distilled—and in some places almost verbatim reproduced—Section 3 of &lt;em&gt;Theoretical Foundations of Conformal Prediction&lt;/em&gt;, the book&lt;sup id="fnref2:1"&gt;&lt;a class="footnote-ref" href="#fn:1"&gt;1&lt;/a&gt;&lt;/sup&gt; goes much further. Chapters beyond Chapter 3 explore conditional coverage, a model‐based perspective on conformal prediction, and various extensions (e.g. weighted or cross-validation based methods). The authors Anastasios N. Angelopoulos, Rina Foygel Barber, and Stephen Bates also address whether conformal sets can be overly conservative and how to use conformal prediction under weaker or different assumptions.&lt;/p&gt;
 &lt;div class="footnote"&gt;
-&lt;hr&gt;
+&lt;hr /&gt;
 &lt;ol&gt;
 &lt;li id="fn:1"&gt;
 &lt;p&gt;Angelopoulos, A. N., Foygel Barber, R., &amp;amp; Bates, S. (2020). &lt;em&gt;Conformal prediction under exchangeability&lt;/em&gt; (Chap. 3). In &lt;em&gt;Theoretical Foundations of Conformal Prediction&lt;/em&gt; (pp. 20–36). Cambridge University Press&amp;#160;&lt;a class="footnote-backref" href="#fnref:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;a class="footnote-backref" href="#fnref2:1" title="Jump back to footnote 1 in the text"&gt;&amp;#8617;&lt;/a&gt;&lt;/p&gt;

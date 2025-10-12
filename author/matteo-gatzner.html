@@ -28,47 +28,9 @@
     <meta name="description" content="The personal blog & portfolio of Matteo Gätzner">
 
 
-    <script>
-    window.MathJax = {
-         loader: {load: ['[tex]/cases']},
-         tex: { 
-           inlineMath: [ 
-             ['\\(', '\\)'],
-             ['$',  '$']   
-           ], 
-           displayMath: [
-                ['$$','$$'],
-             ['\\[', '\\]'],
-            ], 
-           packages: ['base','ams', 'mathtools', 'cases'],
-        //     macros: {
-        //     coloneqq: ['\mathrel{\vcenter{:}}=', 0]
-        // }
-         }, 
-         svg: { 
-           fontCache: 'global' 
-         } 
-    };
-    </script>
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
 </script>
-  <!-- <script> -->
-  <!--     window.MathJax = { -->
-  <!--       tex: { -->
-  <!--         inlineMath: [ -->
-  <!--           ['\(', '\)'],   /* keep the \( … \) pair */ -->
-  <!--           ['$',  '$']       /* also pick up $ … $ */ -->
-  <!--         ], -->
-  <!--         displayMath: [['$$','$$']], -->
-  <!--         packages: ['base','ams'] -->
-  <!--       }, -->
-  <!--       svg: { -->
-  <!--         fontCache: 'global' -->
-  <!--       } -->
-  <!--     }; -->
-  <!-- </script> -->
-  <!-- <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script> -->
 </head>
 
 <body>
@@ -98,6 +60,29 @@
     <div class="container">
       <h1>  Matteo Gätzner Articles
 </h1>
+      <hr>
+    <article class="row teaser">
+      <header class="col-sm-4 text-muted">
+        <ul>
+          <li title="2025-10-12T00:00:00+02:00">
+            <i class="fas fa-clock"></i>
+            Sun 12 October 2025
+          </li>
+          <li>
+            <i class="fas fa-folder-open"></i>
+            <a href="https://www.matteogaetzner.com/category/machine-learning.html">Machine Learning</a>
+          </li>
+        </ul>
+      </header>
+      <div class="col-sm-8">
+        <h4 class="title">
+          <a href="https://www.matteogaetzner.com/physics-informed-neural-networks.html">Physics-informed Neural Networks</a>
+        </h4>
+        <div class="content">
+          An introduction to physics-informed neural networks (PINNs), which integrate physical laws expressed as PDEs into neural network training by enforcing differential equation constraints through automatic differentiation.
+        </div>
+      </div>
+    </article>
       <hr>
     <article class="row teaser">
       <header class="col-sm-4 text-muted">

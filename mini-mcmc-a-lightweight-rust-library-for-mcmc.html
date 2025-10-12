@@ -29,47 +29,9 @@
   <meta name="description" content="This post introduces mini-mcmc, a compact Rust library for running modern MCMC algorithms—like NUTS, HMC, Metropolis–Hastings, and Gibbs—with automatic differentiation, parallel chains, and optional GPU acceleration.">
 
 
-    <script>
-    window.MathJax = {
-         loader: {load: ['[tex]/cases']},
-         tex: { 
-           inlineMath: [ 
-             ['\\(', '\\)'],
-             ['$',  '$']   
-           ], 
-           displayMath: [
-                ['$$','$$'],
-             ['\\[', '\\]'],
-            ], 
-           packages: ['base','ams', 'mathtools', 'cases'],
-        //     macros: {
-        //     coloneqq: ['\mathrel{\vcenter{:}}=', 0]
-        // }
-         }, 
-         svg: { 
-           fontCache: 'global' 
-         } 
-    };
-    </script>
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
 </script>
-  <!-- <script> -->
-  <!--     window.MathJax = { -->
-  <!--       tex: { -->
-  <!--         inlineMath: [ -->
-  <!--           ['\(', '\)'],   /* keep the \( … \) pair */ -->
-  <!--           ['$',  '$']       /* also pick up $ … $ */ -->
-  <!--         ], -->
-  <!--         displayMath: [['$$','$$']], -->
-  <!--         packages: ['base','ams'] -->
-  <!--       }, -->
-  <!--       svg: { -->
-  <!--         fontCache: 'global' -->
-  <!--       } -->
-  <!--     }; -->
-  <!-- </script> -->
-  <!-- <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script> -->
 </head>
 
 <body>
@@ -117,7 +79,7 @@
       </ul>
     </header>
     <div class="content">
-      <hr>
+      <hr />
 <!-- Load Plotly once per page -->
 <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
 
@@ -209,7 +171,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 </script>
 
-<h2>Overview</h2>
+<h2 id="overview">Overview</h2>
 <p><a href="https://github.com/MatteoGaetzner/mini-mcmc"><code>mini-mcmc</code></a> is a Rust library for <strong>Markov Chain Monte Carlo</strong> providing
 <strong>NUTS</strong>, <strong>HMC</strong>, <strong>Metropolis–Hastings</strong>, and <strong>Gibbs</strong> samplers in a single, consistent framework.</p>
 <p>It’s designed to be:</p>
@@ -220,19 +182,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 <li><strong>Deterministic</strong> – explicit seeds and reproducible chains</li>
 </ul>
 <p>Built on <a href="https://burn.dev"><code>burn</code></a>, it supports <strong>autodiff</strong>, <strong>parallel chains</strong>, and optional <strong>GPU acceleration</strong>.</p>
-<hr>
-<h2>Installation</h2>
+<hr />
+<h2 id="installation">Installation</h2>
 <p>Add it to your Rust project:</p>
 <div class="highlight"><pre><span></span><code>cargo<span class="w"> </span>add<span class="w"> </span>mini-mcmc
 </code></pre></div>
-
 <p>Then import it:</p>
 <div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">mini_mcmc</span><span class="p">::</span><span class="o">*</span><span class="p">;</span>
 </code></pre></div>
-
 <p>Full examples are in the <a href="https://github.com/MatteoGaetzner/mini-mcmc">GitHub repo →</a>.</p>
-<hr>
-<h2>Core idea</h2>
+<hr />
+<h2 id="core-idea">Core idea</h2>
 <p>Define your <strong>log density</strong>, choose a <strong>MCMC method</strong>, and run.
 For gradient-based methods (HMC, NUTS), <strong>autodiff</strong> computes gradients automatically — no need to derive them by hand.</p>
 <p>Each sampler provides:</p>
@@ -241,8 +201,8 @@ For gradient-based methods (HMC, NUTS), <strong>autodiff</strong> computes gradi
 <li>Diagnostics (acceptance rate, R-hat, ESS)</li>
 <li>Optional live progress display</li>
 </ul>
-<hr>
-<h2>Quick example — 2D Gaussian via Metropolis–Hastings</h2>
+<hr />
+<h2 id="quick-example-2d-gaussian-via-metropolishastings">Quick example — 2D Gaussian via Metropolis–Hastings</h2>
 <div class="highlight"><pre><span></span><code><span class="k">use</span><span class="w"> </span><span class="n">mini_mcmc</span><span class="p">::</span><span class="n">core</span><span class="p">::{</span><span class="n">init_det</span><span class="p">,</span><span class="w"> </span><span class="n">ChainRunner</span><span class="p">};</span>
 <span class="k">use</span><span class="w"> </span><span class="n">mini_mcmc</span><span class="p">::</span><span class="n">distributions</span><span class="p">::{</span><span class="n">Gaussian2D</span><span class="p">,</span><span class="w"> </span><span class="n">IsotropicGaussian</span><span class="p">};</span>
 <span class="k">use</span><span class="w"> </span><span class="n">mini_mcmc</span><span class="p">::</span><span class="n">metropolis_hastings</span><span class="p">::</span><span class="n">MetropolisHastings</span><span class="p">;</span>
@@ -266,7 +226,6 @@ For gradient-based methods (HMC, NUTS), <strong>autodiff</strong> computes gradi
 <span class="w">    </span><span class="fm">assert_eq!</span><span class="p">(</span><span class="n">sample</span><span class="p">.</span><span class="n">shape</span><span class="p">()[</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="mi">1000</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-
 <div class="plot-wrap">
   <div id="2d-gaussian" class="plot-box"></div>
 </div>
@@ -325,17 +284,16 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 </script>
 
-<hr>
-<h2>Gradient-based samplers</h2>
-<p>For HMC and NUTS, you only need to specify $\log p(\theta)$ —
-autodiff (via <a href="https://burn.dev"><code>burn</code></a>) handles $\nabla_\theta \log p(\theta)$.</p>
+<hr />
+<h2 id="gradient-based-samplers">Gradient-based samplers</h2>
+<p>For HMC and NUTS, you only need to specify <span class="arithmatex">\(\log p(\theta)\)</span> —
+autodiff (via <a href="https://burn.dev"><code>burn</code></a>) handles <span class="arithmatex">\(\nabla_\theta \log p(\theta)\)</span>.</p>
 <p>Switch between CPU and GPU with one line:</p>
 <div class="highlight"><pre><span></span><code><span class="k">type</span><span class="w"> </span><span class="nc">Backend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">burn</span><span class="p">::</span><span class="n">backend</span><span class="p">::</span><span class="n">Autodiff</span><span class="o">&lt;</span><span class="n">burn</span><span class="p">::</span><span class="n">backend</span><span class="p">::</span><span class="n">NdArray</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="c1">// or: burn::backend::Autodiff&lt;burn::backend::Wgpu&gt;</span>
 </code></pre></div>
-
-<hr>
-<h2>Plots with Generated Samples</h2>
+<hr />
+<h2 id="plots-with-generated-samples">Plots with Generated Samples</h2>
 <div class="plot-wrap">
   <div id="mh-2d-rosenbrock" class="plot-box"></div>
 </div>

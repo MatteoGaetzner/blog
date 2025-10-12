@@ -29,47 +29,9 @@
   <meta name="description" content="A short overview of my MSc thesis, which adapts and applies Sequential and Prior Likelihood Mixing (Kirschner et al., 2025) to anytime-valid uncertainty quantification in tomographic imaging. The work explores how to obtain statistically valid uncertainty for SPECT reconstructions using both classical estimators and modern neural predictors such as U-Net ensembles and diffusion models.">
 
 
-    <script>
-    window.MathJax = {
-         loader: {load: ['[tex]/cases']},
-         tex: { 
-           inlineMath: [ 
-             ['\\(', '\\)'],
-             ['$',  '$']   
-           ], 
-           displayMath: [
-                ['$$','$$'],
-             ['\\[', '\\]'],
-            ], 
-           packages: ['base','ams', 'mathtools', 'cases'],
-        //     macros: {
-        //     coloneqq: ['\mathrel{\vcenter{:}}=', 0]
-        // }
-         }, 
-         svg: { 
-           fontCache: 'global' 
-         } 
-    };
-    </script>
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
 </script>
-  <!-- <script> -->
-  <!--     window.MathJax = { -->
-  <!--       tex: { -->
-  <!--         inlineMath: [ -->
-  <!--           ['\(', '\)'],   /* keep the \( … \) pair */ -->
-  <!--           ['$',  '$']       /* also pick up $ … $ */ -->
-  <!--         ], -->
-  <!--         displayMath: [['$$','$$']], -->
-  <!--         packages: ['base','ams'] -->
-  <!--       }, -->
-  <!--       svg: { -->
-  <!--         fontCache: 'global' -->
-  <!--       } -->
-  <!--     }; -->
-  <!-- </script> -->
-  <!-- <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script> -->
 </head>
 
 <body>
@@ -118,38 +80,38 @@
     </header>
     <div class="content">
       <p><a href="files/thesis.pdf" target="_blank">Download the thesis (PDF)</a></p>
-<hr>
-<h2>Abstract</h2>
+<hr />
+<h2 id="abstract">Abstract</h2>
 <p>We develop anytime-valid methods for uncertainty quantification in tomographic imaging, with a focus on single-photon emission tomography (SPECT). In SPECT, sequentially acquired data is used to reconstruct images representing the radioactivity distribution inside the object. In addition to producing image reconstructions, our approach constructs <em>confidence sequences</em>: collections of confidence sets that contain the true but unknown image with high probability simultaneously across all acquisition steps. We investigate two variants: <em>prior likelihood mixing</em> and <em>sequential likelihood mixing</em>. Both employ likelihood-based constructions, but differ in how they use user-defined distributions. We parameterize these distributions using classical statistical estimators (MLE, MAP) as well as neural methods, namely U-Net ensembles and diffusion models. In numerical experiments, we simulate SPECT data and compare the tightness and empirical coverage rate of different confidence sequences. Empirically, sequential likelihood mixing proves to be a particularly effective method for constructing confidence sequences. The performance of this method depends on the image predictor used: U-Net ensembles often yield tight and reliable confidence sets, while in some settings classical estimators (MLE, MAP) perform best. We also present strategies for generating uncertainty visualizations. Our results suggest that combining statistical theory with neural predictors enables principled, real-time uncertainty quantification, which may support clinical decision-making in SPECT and related modalities.</p>
-<h2>Motivation</h2>
+<h2 id="motivation">Motivation</h2>
 <p>In single-photon emission computed tomography (SPECT), we reconstruct a radiotracer activity image from noisy photon counts collected at multiple projection angles. These measurements follow a <strong>Poisson process</strong> determined by the imaging system, yet standard reconstruction methods—maximum-likelihood, MAP regularization, or neural networks—rarely provide <em>rigorous uncertainty quantification</em>.</p>
 <!-- ![Illustration of SPECT Measurements](images/composite_two_angles.svg) -->
 
 <p><img src="images/composite_two_angles.svg" alt="Illustration of SPECT Measurements" style="display:block; width:100%; height:auto; max-width:800px; margin:1rem auto;" ></p>
-<p><em>Illustration of Poisson count measurements $\mathbf{y} ∼ \mathrm{Pois}(\mathcal{R}(\theta^\ast, x))$ of image $\theta^\ast \in [0, 1]^{64 \times 64}$ at angles $x \in {0, 30}$.</em></p>
+<p><em>Illustration of Poisson count measurements <span class="arithmatex">\(\mathbf{y} ∼ \mathrm{Pois}(\mathcal{R}(\theta^\ast, x))\)</span> of image <span class="arithmatex">\(\theta^\ast \in [0, 1]^{64 \times 64}\)</span> at angles <span class="arithmatex">\(x \in \{0, 30\}\)</span>.</em></p>
 <p>My thesis investigates how to achieve <strong>anytime-valid uncertainty</strong> in this setting: uncertainty that remains statistically valid <strong>at every stage of data acquisition</strong>, not just for a fixed sample size.</p>
-<hr>
-<h2>Confidence Sequences</h2>
+<hr />
+<h2 id="confidence-sequences">Confidence Sequences</h2>
 <p>The central theoretical tool is a <strong>confidence sequence (CS)</strong>, a time-indexed family of sets</p>
-<p>$$
+<div class="arithmatex">\[
 S_1, S_2, \dots \subseteq \Theta
 \quad\text{such that}\quad
 \Pr(\forall t:\ \theta^\ast \in S_t) \ge 1 - \alpha.
-$$</p>
-<p>In the above, $\theta^\ast \in \Theta$ is a unknown parameter living in a known space $\Theta$ and $\alpha \in (0, 1)$ is a user-specified error level.</p>
-<p>Unlike classical confidence intervals, a CS retains its coverage property <strong>across all time steps</strong>, that is, for $\theta^\ast$ is inside <strong>all</strong> $S_t$ with a (high) probability of at least $1-\alpha$.
+\]</div>
+<p>In the above, <span class="arithmatex">\(\theta^\ast \in \Theta\)</span> is a unknown parameter living in a known space <span class="arithmatex">\(\Theta\)</span> and <span class="arithmatex">\(\alpha \in (0, 1)\)</span> is a user-specified error level.</p>
+<p>Unlike classical confidence intervals, a CS retains its coverage property <strong>across all time steps</strong>, that is, for <span class="arithmatex">\(\theta^\ast\)</span> is inside <strong>all</strong> <span class="arithmatex">\(S_t\)</span> with a (high) probability of at least <span class="arithmatex">\(1-\alpha\)</span>.
 We do not have to worry about multiple-testing. This allows us to continuously monitor uncertainty and decide to stop data collection when a confidence set becomes sufficiently tight.</p>
-<hr>
-<h2>Theoretical Foundation: Likelihood Mixing</h2>
+<hr />
+<h2 id="theoretical-foundation-likelihood-mixing">Theoretical Foundation: Likelihood Mixing</h2>
 <p>The thesis builds on the <strong>Sequential Likelihood Mixing (SLM)</strong> and <strong>Prior Likelihood Mixing (PLM)</strong> theorems developed by <strong>Kirschner, Krause, Meziu, and Mojmir (2025)</strong>.
 These results provide general constructions of confidence sequences directly from likelihoods.</p>
 <ul>
-<li><strong>Prior Likelihood Mixing (PLM)</strong> constructs level sets of a marginal likelihood ratio using a fixed prior $\mu_0$.</li>
-<li><strong>Sequential Likelihood Mixing (SLM)</strong> generalizes this by updating the prior sequentially into a data-dependent <em>mixing</em> distribution $\mu_t$.</li>
+<li><strong>Prior Likelihood Mixing (PLM)</strong> constructs level sets of a marginal likelihood ratio using a fixed prior <span class="arithmatex">\(\mu_0\)</span>.</li>
+<li><strong>Sequential Likelihood Mixing (SLM)</strong> generalizes this by updating the prior sequentially into a data-dependent <em>mixing</em> distribution <span class="arithmatex">\(\mu_t\)</span>.</li>
 </ul>
-<p>Crucially, <strong>as long as $\mu_t$ depends only on past data</strong>—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains <strong>anytime-valid</strong>.</p>
-<hr>
-<h2>Key Findings</h2>
+<p>Crucially, <strong>as long as <span class="arithmatex">\(\mu_t\)</span> depends only on past data</strong>—that is, not on the most recently observed or any future sample—the resulting confidence sequence remains <strong>anytime-valid</strong>.</p>
+<hr />
+<h2 id="key-findings">Key Findings</h2>
 <ul>
 <li><strong>Sequential Likelihood Mixing performs best.</strong> SLM produced tight, reliable confidence sequences, particularly when combined with U-Net ensembles.</li>
 <li><strong>PLM Approximations</strong> often <strong>under-cover</strong>.</li>
@@ -171,8 +133,8 @@ These results provide general constructions of confidence sequences directly fro
        alt="Average Confidence Coefficients"
        style="display:block; width:100%; height:auto; max-width:700px; margin:1rem auto;"></p>
 <p>In Table 4.2, lower numbers are better. They represent lower average confidence coefficients and tighter confidence sets. (Check the thesis for a detailed explanation.) The table shows that S-UMix, sequential likelihood mixing using U-Net ensembles, performs best in most settings.</p>
-<hr>
-<h2>Why It Matters</h2>
+<hr />
+<h2 id="why-it-matters">Why It Matters</h2>
 <p>This work bridges <strong>finite-sample statistical guarantees</strong> and <strong>modern neural image reconstruction</strong>.
 It shows that the likelihood-mixing constructions of Kirschner et al. (2025), can be used to:</p>
 <ul>
@@ -181,11 +143,11 @@ It shows that the likelihood-mixing constructions of Kirschner et al. (2025), ca
 <li>enable <strong>principled stopping criteria</strong> based on uncertainty reduction.</li>
 </ul>
 <p>In short, the thesis demonstrates that <strong>anytime-valid neural uncertainty quantification</strong> is feasible for SPECT imaging by pairing theoretically grounded confidence sequences with data-driven approximations.</p>
-<hr>
-<h2>Resources</h2>
+<hr />
+<h2 id="resources">Resources</h2>
 <p><a href="files/thesis.pdf" target="_blank">Download the thesis (PDF)</a> </br>
 Code release (coming soon): <a href="https://github.com/MatteoGaetzner/anytime-nuq">MatteoGaetzner/anytime-nuq</a></p>
-<hr>
+<hr />
 <p>This post summarizes my MSc Statistics thesis, supervised by <strong>Prof. Dr. Jonas Peters</strong> and co-advised by <strong>Dr. Johannes Kirschner</strong>, conducted within the Swiss Data Science Center (SDSC).</p>
     </div>
   </article>

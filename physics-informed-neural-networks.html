@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>  Physics-informed Neural Networks | Matteo Gätzner – Blog & Portfolio
+</title>
+  <link rel="canonical" href="https://www.matteogaetzner.com/physics-informed-neural-networks.html">
+
+    <link rel="apple-touch-icon" href="https://www.matteogaetzner.com/apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" type="image/png" href="https://www.matteogaetzner.com/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://www.matteogaetzner.com/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="https://www.matteogaetzner.com/manifest.json">
+    <meta name="theme-color" content="#333333">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/solar/bootstrap.min.css">
+  <link rel="stylesheet" href="https://www.matteogaetzner.com/theme/css/fontawesome.min.css">
+  <link rel="stylesheet" href="https://www.matteogaetzner.com/theme/css/pygments/default.min.css">
+  <link rel="stylesheet" href="https://www.matteogaetzner.com/theme/css/theme.css">
+  <link rel="stylesheet" href="https://www.matteogaetzner.com/theme/css/oldstyle.css">
+
+  <link rel="alternate" type="application/atom+xml" title="Full Atom Feed"
+        href="https://www.matteogaetzner.com/feeds/all.atom.xml">
+  <link rel="alternate" type="application/atom+xml" title="Categories Atom Feed"
+        href="https://www.matteogaetzner.com/feeds/machine-learning.atom.xml">  
+  <meta name="description" content="An introduction to physics-informed neural networks (PINNs), which integrate physical laws expressed as PDEs into neural network training by enforcing differential equation constraints through automatic differentiation.">
+
+
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js">
+</script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="container">
+<div class="row">
+    <div class="col-sm-4">
+      <a href="https://www.matteogaetzner.com/">
+        <img class="img-fluid rounded" src=https://www.matteogaetzner.com/images/header.jpg alt="Matteo Gätzner – Blog & Portfolio">
+      </a>
+    </div>
+  <div class="col-sm-8">
+    <h1 class="title"><a href="https://www.matteogaetzner.com/">Matteo Gätzner – Blog & Portfolio</a></h1>
+      <p class="text-muted">Projects, insights & thoughts</p>
+      <ul class="list-inline">
+            <li class="list-inline-item"><a href="https://www.matteogaetzner.com/about/">About</a></li>
+            <li class="list-inline-item"><a href="https://www.matteogaetzner.com/resume/">Resume</a></li>
+            <li class=" list-inline-item text-muted">|</li>
+          <li class="list-inline-item"><a class="fab fa-github" href="https://github.com/MatteoGaetzner" target="_blank"></a></li>
+          <li class="list-inline-item"><a class="fab fa-linkedin" href="https://linkedin.com/in/matteo-g" target="_blank"></a></li>
+      </ul>
+  </div>
+</div>    </div>
+  </header>
+
+  <div class="main">
+    <div class="container">
+      <h1>  Physics-informed Neural Networks
+</h1>
+      <hr>
+  <article class="article">
+    <header>
+      <ul class="list-inline">
+        <li class="list-inline-item text-muted" title="2025-10-12T00:00:00+02:00">
+          <i class="fas fa-clock"></i>
+          Sun 12 October 2025
+        </li>
+        <li class="list-inline-item">
+          <i class="fas fa-folder-open"></i>
+          <a href="https://www.matteogaetzner.com/category/machine-learning.html">Machine Learning</a>
+        </li>
+          <li class="list-inline-item">
+            <i class="fas fa-tag"></i>
+              <a href="https://www.matteogaetzner.com/tag/neural-networks.html">#neural-networks</a>,               <a href="https://www.matteogaetzner.com/tag/physics.html">#physics</a>,               <a href="https://www.matteogaetzner.com/tag/pdes.html">#pdes</a>          </li>
+      </ul>
+    </header>
+    <div class="content">
+      <hr />
+<h2 id="summary">Summary</h2>
+<p>Physics-informed neural networks (PINNs) are a class of deep learning models that incorporate physical laws—typically expressed as partial differential equations (PDEs)—directly into the training process. Instead of relying solely on data, PINNs leverage automatic differentiation to enforce that the neural network outputs satisfy the governing equations of the system.</p>
+<hr />
+<h2 id="general-recipe">General Recipe</h2>
+<p>Let
+<span class="arithmatex">\(\theta \in \Theta\)</span>
+denote the parameters of a neural network, and let
+<span class="arithmatex">\(u_\theta : \mathcal{Y} \to \mathbb{R}^d\)</span>
+be a deep neural network (DNN) that approximates the true physical field
+<span class="arithmatex">\(u : \mathcal{Y} \to \mathbb{R}^d\)</span>,
+which is an (unknown) solution to a PDE defined on the domain
+<span class="arithmatex">\(\mathcal{Y} \subset \mathbb{R}^m\)</span>.</p>
+<p>We aim to find parameters <span class="arithmatex">\(\theta^\ast\)</span> such that <span class="arithmatex">\(u_\theta \approx u\)</span>.
+Formally, this can be expressed as</p>
+<div class="arithmatex">\[
+\theta^\ast \in \arg\min_{\theta \in \Theta} |u_\theta - u|_p,
+\]</div>
+<p>where the error norm is defined as</p>
+<div class="arithmatex">\[
+|u_\theta - u|_p
+\coloneqq \left( \int_\mathcal{Y} |u(y) - u_\theta(y)|^p , dy \right)^{1/p}.
+\]</div>
+<p>Since the true solution <span class="arithmatex">\(u\)</span> is generally unknown, we cannot compute this loss directly.
+However, we typically know that <span class="arithmatex">\(u\)</span> satisfies a PDE of the form</p>
+<div class="arithmatex">\[
+\mathcal{D}(u(y)) = f(y), \quad y \in \mathcal{Y},
+\]</div>
+<p>where <span class="arithmatex">\(\mathcal{D}\)</span> is a (possibly nonlinear) differential operator, and
+<span class="arithmatex">\(f : \mathcal{Y} \to \mathbb{R}^d\)</span> is a known source term.</p>
+<p>Because <span class="arithmatex">\(u_\theta\)</span> is differentiable with respect to its inputs, we can use automatic differentiation (AD) to compute <span class="arithmatex">\(\mathcal{D}(u_\theta(y))\)</span>.
+This allows us to define the <strong>PDE residual</strong></p>
+<div class="arithmatex">\[
+\mathcal{R}_\theta(y) \coloneqq \mathcal{D}(u_\theta(y)) - f(y),
+\]</div>
+<p>for all <span class="arithmatex">\(y \in \mathcal{Y}\)</span>.</p>
+<p>To ensure that <span class="arithmatex">\(u_\theta\)</span> satisfies the PDE, we minimize the expected residual:</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{PDE}}(\theta)
+\coloneqq \int_\mathcal{Y} |\mathcal{R}_\theta(y)|^p , dy.
+\]</div>
+<p>In practice, this integral is approximated by a numerical quadrature over <span class="arithmatex">\(N \in \mathbb{N}\)</span> collocation points <span class="arithmatex">\(\{y_i\}_{i=1}^N\)</span>, yielding</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{PDE}}(\theta)
+\approx \sum_{i=1}^N w_i , |\mathcal{R}_\theta(y_i)|^p,
+\]</div>
+<p>where <span class="arithmatex">\(w_i &gt; 0\)</span> are quadrature weights (commonly <span class="arithmatex">\(w_i = 1/N\)</span>) and typically <span class="arithmatex">\(p=2\)</span> (mean squared error).
+The network parameters <span class="arithmatex">\(\theta\)</span> are then optimized via gradient-based methods such as <strong>Adam</strong>.</p>
+<hr />
+<h2 id="incorporating-data-and-boundary-conditions">Incorporating Data and Boundary Conditions</h2>
+<p>In many physical systems, we have <strong>initial</strong>, <strong>boundary</strong>, or <strong>measurement</strong> data that the solution must satisfy.
+Let:</p>
+<ul>
+<li><span class="arithmatex">\(t \geq 0\)</span> denote time,</li>
+<li><span class="arithmatex">\(x \in \mathcal{X}\)</span> spatial coordinates, and</li>
+<li><span class="arithmatex">\(y \in \mathcal{Y}\)</span> represent parameters or input conditions.</li>
+</ul>
+<p>Then the PINN is a function</p>
+<div class="arithmatex">\[
+u_\theta : \mathbb{R}_{\geq 0} \times \mathcal{X} \times \mathcal{Y} \to \mathbb{R}^d,
+\quad (t, x, y) \mapsto u_\theta(t, x, y).
+\]</div>
+<h3 id="initial-conditions">Initial Conditions</h3>
+<p>If the true solution satisfies an initial condition</p>
+<div class="arithmatex">\[
+\begin{align}
+u(0, x_1, y_1) &amp;= g(x_1, y_1) \\
+&amp;\vdots \\
+u(0, x_{N_{\text{IC}}}, y_{N_{\text{IC}}}) &amp;= g(x_{N_{\text{IC}}}, y_{N_{\text{IC}}}) \\
+\end{align}
+\]</div>
+<p>we can enforce this constraint by adding an <strong>initial loss term</strong></p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{IC}}(\theta)
+= \frac{1}{N_{\text{IC}}} \sum_{i=1}^{N_{\text{IC}}}
+|u_\theta(0, x_i, y_i) - g(x_i, y_i)|^2.
+\]</div>
+<h3 id="boundary-conditions">Boundary Conditions</h3>
+<p>Boundary conditions specify the behavior of the solution on the spatial boundary <span class="arithmatex">\(\partial\mathcal{X}\)</span>.
+They can be enforced by adding a loss term similar to the initial condition loss.
+For example, if the solution satisfies a boundary condition <span class="arithmatex">\(u(x, y) = h(x, y)\)</span> for <span class="arithmatex">\((x, y) \in \partial\mathcal{X} \times \mathcal{Y}\)</span>, we define</p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{BC}}(\theta)
+= \frac{1}{N_{\text{BC}}} \sum_{i=1}^{N_{\text{BC}}}
+|u_\theta(x_i, y_i) - h(x_i, y_i)|^2.
+\]</div>
+<h3 id="observational-data">Observational Data</h3>
+<p>If we have observed data points <span class="arithmatex">\({(t_i, x_i, y_i, u_i)}_{i=1}^{N_{\text{data}}}\)</span>,
+we can include a <strong>data loss</strong></p>
+<div class="arithmatex">\[
+\mathcal{L}_{\text{data}}(\theta)
+= \frac{1}{N_{\text{data}}} \sum_{i=1}^{N_{\text{data}}}
+|u_\theta(t_i, x_i, y_i) - u_i|^2.
+\]</div>
+<hr />
+<h2 id="full-training-objective">Full Training Objective</h2>
+<p>The total PINN loss typically combines the PDE, initial, and data losses:</p>
+<div class="arithmatex">\[
+\mathcal{L}(\theta) = \lambda_{\text{PDE}} \mathcal{L}_{\text{PDE}}(\theta) + 
+\lambda_{\text{IC}} \mathcal{L}_{\text{IC}}(\theta) +
+\lambda_{\text{BC}} \mathcal{L}_{\text{BC}}(\theta) +
+\lambda_{\text{data}} \mathcal{L}_{\text{data}}(\theta),
+\]</div>
+<p>where the weights <span class="arithmatex">\(\lambda_{\text{PDE}}, \lambda_{\text{IC}}, \lambda_{\text{BC}}, \lambda_{\text{data}} &gt; 0\)</span> balance the contributions of each term.</p>
+<p>The network parameters are then <strong>optimized</strong> by minimizing the loss function:</p>
+<div class="arithmatex">\[
+\hat{\theta} = \arg\min_{\theta \in \Theta} \mathcal{L}(\theta),
+\]</div>
+<p>where <span class="arithmatex">\(\hat{\theta}\)</span> denotes the parameters obtained by numerical optimization (e.g., using Adam).</p>
+    </div>
+  </article>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+<div class="row">
+  <ul class="col-sm-6 list-inline">
+    <li class="list-inline-item"><a href="https://www.matteogaetzner.com/archives.html">Archives</a></li>
+    <li class="list-inline-item"><a href="https://www.matteogaetzner.com/categories.html">Categories</a></li>
+      <li class="list-inline-item"><a href="https://www.matteogaetzner.com/tags.html">Tags</a></li>
+  </ul>
+  <p class="col-sm-6 text-sm-right text-muted">
+    Generated by <a href="https://github.com/getpelican/pelican" target="_blank">Pelican</a>
+    / <a href="https://github.com/nairobilug/pelican-alchemy" target="_blank">&#x2728;</a>
+  </p>
+</div>    </div>
+  </footer>
+
+</body>
+
+</html>
