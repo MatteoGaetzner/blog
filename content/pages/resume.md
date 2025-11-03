@@ -11,7 +11,7 @@ Authors: Matteo Gätzner
 
 **ETH Zürich** (Zürich, Switzerland) 09/2023 – Present
 
-- **GPA:**: 5.1 
+- **GPA:** 5.1 
 - **Relevant Courses:**
     - Reliable and Trustworthy AI,
     - Probabilistic AI,
