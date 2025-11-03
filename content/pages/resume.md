@@ -11,6 +11,7 @@ Authors: Matteo Gätzner
 
 **ETH Zürich** (Zürich, Switzerland) 09/2023 – Present
 
+- **GPA:**: 5.1 
 - **Relevant Courses:**
     - Reliable and Trustworthy AI,
     - Probabilistic AI,
@@ -20,7 +21,7 @@ Authors: Matteo Gätzner
     - Statistical Modelling, and
     - Natural Language Processing.
 - **Master’s Thesis:** _Towards Practical Confidence Estimation for Compressed Sensing Models_
-    - Developing confidence sequences and interpretable visualizations for CT and MRI reconstruction using diffusion models.
+    - Developed confidence sequences and interpretable visualizations for CT reconstruction using diffusion models.
     - Supervisors: Dr. Johannes Kirschner (Senior Data Scientist, Swiss Data Science Center) and Prof. Dr. Jonas Peters (Professor, Seminar for Statistics)
 
 ---
@@ -29,7 +30,7 @@ Authors: Matteo Gätzner
 
 **Technical University Berlin** (Berlin, Germany) 10/2019 – 03/2023
 
-- **GPA:** 1.4 _(scale 1.0–4.0, 1.0 is highest)_
+- **GPA:** 1.4
 - **Relevant Courses:**
     - Introduction to Artificial Intelligence,
     - Cognitive Algorithms,

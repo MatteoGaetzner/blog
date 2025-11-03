@@ -11,5 +11,5 @@ I maintain an open-source Rust library called **mini-mcmc**, which implements MC
 
 For a detailed overview of my background and skills, please see my full resume: [Resume](../resume/).
 
-I’m always open to discussing interesting projects or potential collaborations—feel free to get in touch via email (matteo.gatzner@gmail.com) or connect on [LinkedIn](https://www.linkedin.com/in/matteo-g) and [GitHub](https://github.com/MatteoGaetzner).
+I’m always open to discussing interesting projects or potential collaborations; feel free to get in touch via email (matteo.gatzner@gmail.com) or connect on [LinkedIn](https://www.linkedin.com/in/matteo-g) and [GitHub](https://github.com/MatteoGaetzner).
 
