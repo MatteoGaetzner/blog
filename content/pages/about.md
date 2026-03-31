@@ -16,6 +16,6 @@ I am a strong advocate for open-source software, clean code, and high-performanc
 
 Professionally, I have engineered end-to-end machine learning solutions across multiple domains. My experience includes developing deep-learning models and deploying them as Docker-containerized REST services, managing spatial data pipelines with PostgreSQL, and building optimized ML predictors while automating complex laboratory workflows.
 
-For a comprehensive overview of my professional background, publications, and technical skills, please see my full [Resume](https://www.google.com/search?q=../resume/).
+For a comprehensive overview of my professional background, publications, and technical skills, please see my full [resume](../resume/).
 
 I'm always open to discussing engineering challenges, deep-tech projects, or potential collaborations. Feel free to reach out via email at matteo.gatzner@gmail.com or connect with me on [LinkedIn](https://www.linkedin.com/in/matteo-g) and [GitHub](https://github.com/MatteoGaetzner).
