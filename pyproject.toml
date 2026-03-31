@@ -1,0 +1,25 @@
+[project]
+name = "matteo-blog"
+version = "0.1.0"
+description = "Personal blog, portfolio, and resume"
+authors = [
+    { name = "Matteo Gätzner", email = "matteo.gatzner@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = [
+    "markdown>=3.10.2",
+    "pelican>=4.11.0",
+    "pymdown-extensions>=10.21.2",
+]
+
+[dependency-groups]
+dev = [
+    "ghp-import>=2.1.0",
+    "livereload>=2.7.1",
+    "watchdog>=6.0.0",
+]
+
+[tool.uv]
+package = false
