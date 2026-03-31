@@ -1,5 +1,5 @@
 Title: Resume
-Date: 2025-06-01 12:00
+Date: 2026-03-31 12:00
 Slug: resume
 Category: About
 Tags: CV, Resume
@@ -8,168 +8,94 @@ Authors: Matteo Gätzner
 ## Education
 
 ### Master of Science in Statistics
-
-**ETH Zürich** (Zürich, Switzerland) 09/2023 – Present
-
-- **GPA:** 5.1 
-- **Relevant Courses:**
-    - Reliable and Trustworthy AI,
-    - Probabilistic AI,
-    - Conformal and Probabilistic Prediction,
-    - Fundamentals of Mathematical Statistics,
-    - Analysis of Variance and Experimental Design,
-    - Statistical Modelling, and
-    - Natural Language Processing.
-- **Master’s Thesis:** _Towards Practical Confidence Estimation for Compressed Sensing Models_
-    - Developed confidence sequences and interpretable visualizations for CT reconstruction using diffusion models.
-    - Supervisors: Dr. Johannes Kirschner (Senior Data Scientist, Swiss Data Science Center) and Prof. Dr. Jonas Peters (Professor, Seminar for Statistics)
-
----
+**ETH Zürich** (Zürich, Switzerland) | 09/2023 – 02/2026
+* **GPA:** 5.4/6.0 
+* **Relevant Courses:** Conformal and Probabilistic Prediction, Probabilistic AI, Reliable and Trustworthy AI.
+* **Master’s Thesis:** Anytime-valid Neural Uncertainty Quantification for SPECT Imaging
+* **Thesis Details:** Designed and implemented Transformer-U-Net, diffusion models, and confidence sequences in Python using PyTorch, Hugging Face, and JAX, with W&B for experiment tracking and hyperparameter optimization, to deliver reliable uncertainty estimates (Best Grade).
 
 ### Bachelor of Science in Computer Science
-
-**Technical University Berlin** (Berlin, Germany) 10/2019 – 03/2023
-
-- **GPA:** 1.4
-- **Relevant Courses:**
-    - Introduction to Artificial Intelligence,
-    - Cognitive Algorithms,
-    - Machine Learning 1,
-    - Stochastics for Computer Scientists, and
-    - Digital Image Processing.
-
----
+**Technische Universität Berlin** (Berlin, Germany) | 10/2019 – 03/2023
+* **GPA:** 1.4 / 5.0
+* **Bachelor Thesis:** Using the GDReG for Maximum Likelihood Training of Energy-Based Models 
+* **Thesis Details:** Accelerated training of normalizing flows, achieving the same performance with 5x fewer epochs using PyTorch, pandas, NumPy and Matplotlib (Best Grade).
 
 ### Abitur
-
-**Wirtschaftsgymnasium Offenburg** (Offenburg, Germany) 09/2011 – 06/2017
+**Wirtschaftsgymnasium Offenburg** (Offenburg, Germany) | 09/2011 – 06/2017
 
 ---
 
 ## Work Experience
 
 ### Lab Automation & Machine Learning Intern
-
-**Roche** (Basel, Switzerland) 03/2024 – 09/2024
-
-- Automated a key enzyme phenotyping workflow involving various devices (e.g., pipetting robots, LC–MS), designing end-to-end automation scripts to synchronize data acquisition, sample handling, and instrument control.
-- Developed classical and deep learning–based drug–drug interaction prediction models, employing:
-    - **CatBoost** (fast gradient-boosted decision trees),
-    - **ChemProp** (direct molecular property prediction), and
-    - **DGL-LifeSci–based graph neural network fingerprints** (to capture complex molecular structures).
-
----
+**Roche** (Basel, Switzerland) | 03/2024 – 09/2024 
+* Automated an enzyme phenotyping workflow across pipetting robots and LC-MS, cutting manual setup time by 4 hours per run and reducing overall analysis turnaround from 6 months (external) to under 2 weeks in-house.
+* Built and optimized drug-drug interaction predictors with GNNs, CatBoost, and other ML models, achieving an MCC of 0.8 through cross-validation and hyperparameter tuning using Python, PyTorch, scikit-learn, and W&B.
 
 ### AI Research Assistant
+**Fraunhofer Heinrich-Hertz Institute** (Berlin, Germany) | 05/2022 – 10/2023
+* Developed and deployed a deep-learning-based heat-island simulator on a Linux server for Dresden and Langenfeld, delivering city-scale predictions at 10 m resolution with an MAE of 0.6°C (Website: www.klips-projekt.de).
+* Developed a heat and humidity map forecasting model using a custom attention-based geospatial interpolation module, leveraging PostgreSQL for data management to achieve an MAE of 0.8°C for temperature and 8% for relative humidity.
+* Engineered a Docker-containerized FastAPI REST service with Nginx to serve model outputs, delivering 49 large-format (2300x1700 px) forecast heatmaps with full bundle transfers in under 2 seconds.
 
-**Fraunhofer Heinrich-Hertz Institut** (Berlin, Germany) 05/2022 – 10/2023
+### Teaching Assistant, Machine Learning
+**Technische Universität Berlin** (Berlin, Germany) | 10/2021 – 12/2022 
+* Prepared materials and graded assignments for core graduate and undergraduate ML courses for 50-100 students.
+* Developed a coding-based exam, assessing student proficiency across Python's data science stack (NumPy, pandas, scikit-learn).
 
-- Developed and deployed a deep learning–based heat-island simulation system for Dresden and Langenfeld.
-- Built a high-resolution heat-island forecasting model, leveraging:
-    - A recurrent neural network for low-latency, point-wise forecasts.
-    - A custom attention mechanism for geospatial interpolation.
-- Developed and maintained a REST API to serve predictions to external partners.
-- Presented project outcomes and status updates to stakeholders (internal and external).
-
----
-
-### Teaching Assistant for Machine Learning Courses
-
-**Technische Universität Berlin** (Berlin, Germany) 10/2021 – 12/2022
-
-- Assisted a research project on gradient estimators and normalizing flows.
-- Supported a core undergraduate ML course designed to build an intuitive understanding of fundamental concepts, their origins, and real-world applications.
-- Guided students through basic cognitive capabilities of computer programs, including motion detection, classification, and categorization. Discussed applications such as:
-    - automated handwriting recognition,
-    - intelligent email spam filtering, and
-    - semantic information extraction from text.
-- Contributed to lecture content on:
-    - supervised learning methods (linear classification & regression, kernel methods),
-    - gradient descent optimization,
-    - model selection (cross-validation),
-    - dimensionality reduction (PCA), and
-    - fundamentals of neural networks.
-- Organized and graded exercises for the **Python Programming for Machine Learning** elective track, enabling hands-on practice with ML libraries and frameworks.
-- Managed forum Q&A, clarified conceptual questions, and provided feedback on both theoretical and programming assignments to ensure students met learning objectives.
-
----
-
-### IT Administrator
-
-**TechLabs Berlin** (Berlin, Germany) 09/2020 – 06/2022
-
-- Managed technical on- and off-boarding of new management members and students.
-- Configured and set up GitHub repositories (permissions, branching policies, CI/CD).
-- Provided day-to-day technical troubleshooting for Linux- and macOS-based workstations.
-
----
+### DevOps Engineer
+**TechLabs Berlin** (Berlin, Germany) | 09/2020 – 06/2022
+* Provisioned and managed software development infrastructure, including GitHub repositories, for hundreds of students across four tracks (UX Design, Data Science, Web Dev, AI), streamlining project setup and improving contributor velocity.
+* Enhanced and maintained a JavaScript-based student management application, automating user provisioning and resolving technical support requests for the entire student cohort.
 
 ### ESL (English as a Second Language) Teacher
+**TPR English School** (Zhuhai, China) | 06/2018 – 06/2019
+* Planned and delivered English lessons to beginner and intermediate students.
+* Designed lesson plans, exercises, and assessments focusing on reading, writing, listening, and speaking skills.
 
-**TPR English School** (Zhuhai, China) 06/2018 – 06/2019
-
-- Planned and delivered English lessons to beginner and intermediate students.
-- Designed lesson plans, exercises, and assessments focusing on reading, writing, listening, and speaking skills.
+### Furniture Deliverer
+**Patti’s Hire & Absolute Party Hire** (Sydney, Australia) | 06/2017 – 04/2018
+* Delivered various types of furniture and set up marquees for events and parties (weddings, corporate events, festivals).
+* Coordinated logistics and scheduling to meet tight event timelines.
 
 ---
 
-### Furniture Deliverer
+## Publications
 
-**Patti’s Hire & Absolute Party Hire** (Sydney, Australia) 06/2017 – 04/2018
-
-- Delivered various types of furniture and set up marquees for events and parties (weddings, corporate events, festivals).
-- Coordinated logistics and scheduling to meet tight event timelines.
+### Principled Confidence Estimation for Deep Computed Tomography
+**Author** (Zürich, Switzerland) | 09/2025 – 01/2026 
+* Developed a principled framework for uncertainty quantification in CT reconstruction using sequential likelihood mixing, establishing theoretical coverage guarantees for deep learning models (U-Net, Diffusion) under Poisson noise.
+* Utilized the framework to detect hallucinations, geometric inconsistencies and visualize interpretable uncertainty maps.
+* Submitted to the International Conference on Machine Learning (ICML) 2026. Preprint: arxiv.org/abs/2602.05812.
 
 ---
 
 ## Projects
 
-### Rust Library: **mini-mcmc**
+### Open-source Library: mini-mcmc
+**Author & Maintainer** (Zürich, Switzerland) | 01/2025 – Present
+* Built high-performance MCMC samplers in Rust, implementing a suite of algorithms (HMC, NUTS, Gibbs) and diagnostics.
+* Published on GitHub with an extensive test suite, CI/CD via GitHub Actions, and comprehensive documentation.
 
-Open Source Project (Zürich, Switzerland) 03/2025 – Present
-
-- Author and main contributor of **mini-mcmc**, an open-source Rust library implementing Markov Chain Monte Carlo (MCMC) algorithms, including:
-    - Hamiltonian Monte Carlo (HMC),
-    - Gibbs Sampling,
-    - Metropolis-Hastings, and
-    - No-U-Turn Sampler (NUTS).
-- Focused on performance, safety, and ease of integration into probabilistic modeling pipelines.
-- Repository: [github.com/MatteoGaetzner/mini-mcmc](https://github.com/MatteoGaetzner/mini-mcmc)
-
----
-
-### Bachelor Thesis
-
-**Technical University Berlin** (Berlin, Germany) 06/2022 – 01/2023
-
-- **Title:** _Using the Generalized Doubly Reparametrized Gradient Estimator for Maximum Likelihood Training of Energy-Based Models_
-    - Conducted an in-depth review of normalizing flows and gradient estimators in variational inference.
-    - Derived and experimentally evaluated the Forward-KL GDREG method.
-    - Focused on approximating trajectory distributions of quantum-mechanical particles in double-well potentials.
+### Open-source Library: epub2anki
+**Author & Maintainer** (Zürich, Switzerland) | 2026 – Present
+* Built an open-source library that automatically generates high-quality Anki flashcards from EPUB documents using LLMs, providing a highly cost-effective study tool.
 
 ---
 
 ## Technical Skills
 
-- **Operating Systems:** Linux, macOS, Windows.
-- **Programming Languages:** Python, Rust, C, SQL.
-- **Developer Tools:** Git, CMake, Make, Docker.
-- **Frameworks & Libraries:** 
-    - PyTorch (DL research & prototyping),
-    - WandB, MLflow (experiment tracking & model management),
-    - FastAPI (production-ready ML-serving APIs), and
-    - GIS Libraries (e.g. Geopandas, Rasterio).
-- **Databases & Web Technologies:** PostgreSQL, Nginx.
-- **Other Skills:** Linux CLI tools, CI/CD practices, REST API design.
+* **Operating Systems:** Linux, macOS, Windows.
+* **Programming Languages:** Python, Rust, C, SQL.
+* **Developer Tools:** Git, CMake, Make, Docker.
+* **Frameworks & Libraries:** PyTorch, Hugging Face, JAX, WandB, MLflow, FastAPI, Geopandas, Rasterio.
+* **Databases & Web Technologies:** PostgreSQL, Nginx.
+* **Other Skills:** Linux CLI tools, CI/CD practices, REST API design.
 
 ---
 
 ## Languages
 
-- **German:** Native.
-- **English:** Fluent (IELTS Academic: 8.0 / 9.0).
-- **Chinese:** Basic (HSK 4: 248 / 300).
-
----
-
-_Additional contact details available upon request._
+* **German:** Native.
+* **English:** Fluent (IELTS 8.0/9.0).
+* **Chinese:** Basic (HSK 4).

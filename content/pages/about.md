@@ -1,15 +1,21 @@
 Title: About
-Date: 2025-06-01 12:00
+Date: 2026-03-31 17:00
 Slug: about
 Category: About
 Tags: About, Bio
 Authors: Matteo Gätzner
 
-I’m Matteo Gätzner, currently pursuing an M.Sc. in Statistics at ETH Zürich, where I focus on confidence estimation methods for compressed sensing. Previously, I earned a B.Sc. in Computer Science from TU Berlin and have worked on probabilistic inference, MCMC methods, and AI-driven forecasting. I’ve also held roles at Roche (lab automation & ML) and Fraunhofer HHI (AI research).
+I am Matteo Gätzner, a Machine Learning Engineer and Researcher with an M.Sc. in Statistics from ETH Zürich and a B.Sc. in Computer Science from TU Berlin. My expertise spans the entire machine learning lifecycle, from building efficient data infrastructure and training complex deep learning models to deploying scalable AI services into production.
 
-I maintain an open-source Rust library called **mini-mcmc**, which implements MCMC algorithms (HMC, Gibbs sampling, Metropolis–Hastings, NUTS) and is designed for easy integration into probabilistic modeling pipelines: [github.com/MatteoGaetzner/mini-mcmc](https://github.com/MatteoGaetzner/mini-mcmc).
+By combining a strong foundation in computer science with the rigorous statistical methodologies required for probabilistic inference and uncertainty quantification, I focus on making AI systems both highly performant and highly reliable for real-world applications.
 
-For a detailed overview of my background and skills, please see my full resume: [Resume](../resume/).
+I am a strong advocate for open-source software, clean code, and high-performance computing. I author and maintain several projects that reflect my interest in bridging the gap between research and engineering:
 
-I’m always open to discussing interesting projects or potential collaborations; feel free to get in touch via email (matteo.gatzner@gmail.com) or connect on [LinkedIn](https://www.linkedin.com/in/matteo-g) and [GitHub](https://github.com/MatteoGaetzner).
+  * **mini-mcmc**: A high-performance MCMC sampling library built in Rust. It implements a suite of advanced algorithms, including HMC, NUTS, and Gibbs sampling, designed for robust probabilistic modeling.
+  * **epub2anki**: An open-source library that automatically generates high-quality Anki flashcards from EPUB documents using LLMs, providing a highly cost-effective study tool.
 
+Professionally, I have engineered end-to-end machine learning solutions across multiple domains. My experience includes developing deep-learning models and deploying them as Docker-containerized REST services, managing spatial data pipelines with PostgreSQL, and building optimized ML predictors while automating complex laboratory workflows.
+
+For a comprehensive overview of my professional background, publications, and technical skills, please see my full [Resume](https://www.google.com/search?q=../resume/).
+
+I'm always open to discussing engineering challenges, deep-tech projects, or potential collaborations. Feel free to reach out via email at matteo.gatzner@gmail.com or connect with me on [LinkedIn](https://www.linkedin.com/in/matteo-g) and [GitHub](https://github.com/MatteoGaetzner).
